@@ -1,11 +1,13 @@
-name: Run Jest Tests on Releases
+name: Automated Tests for MultiVault
 
 on:
   push:
     branches:
+      - main
       - releases
   pull_request:
     branches:
+      - main
       - releases
 
 jobs:
@@ -28,5 +30,26 @@ jobs:
           npm install --save-dev jest
 
       - name: Run Jest Tests
+        working-directory: ./multivault
+        run: npm test
+
+  enforce-tests-on-main:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Install Dependencies
+        working-directory: ./multivault
+        run: npm install
+
+      - name: Run Jest Tests for Main
         working-directory: ./multivault
         run: npm test
