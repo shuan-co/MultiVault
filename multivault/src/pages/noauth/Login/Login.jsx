@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import loginBg from './loginBg.jpg'
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+    const navigate = useNavigate();
     const [activeButton, setActiveButton] = useState('User');
 
     const handleButtonClick = (button) => {
@@ -45,7 +47,7 @@ export default function Login() {
             <button className='text-white bg-amber-500 w-full rounded-md p-2 hover:bg-amber-400'>Sign in</button>
             <div className='text-center space-x-4 text-slate-400'>
               <a href className='text-xs hover:underline underline-offset-4'>Forgot password</a>
-              <a href className='text-xs hover:underline underline-offset-4'>Create an account</a>
+              <a href onClick={() => navigate('/register')} className='text-xs hover:underline underline-offset-4'>Create an account</a>
             </div>
           </div>
         </div>

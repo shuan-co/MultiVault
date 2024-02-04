@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import registerBg from './registerBg.jpg'
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
-    const [activeButton, setActiveButton] = useState('Business');
+    const navigate = useNavigate();
+    const [activeButton, setActiveButton] = useState('User');
 
   return (
     <div style={{ backgroundImage:`url(${registerBg})` }} className='flex items-center justify-center h-screen'>
@@ -72,7 +74,7 @@ export default function Register() {
                 </div>
 
                 <div className='mx-auto p-2 mt-3 grid grid-cols-8 gap-5'>
-                    <button className='text-white bg-zinc-500 w-full rounded-md p-2 hover:bg-zinc-400 col-span-4'>Cancel</button>
+                    <button onClick={() => navigate('/login')} className='text-white bg-zinc-500 w-full rounded-md p-2 hover:bg-zinc-400 col-span-4'>Cancel</button>
                     <button className='text-white bg-amber-500 w-full rounded-md p-2 hover:bg-amber-400 col-span-4'>Register</button>
                 </div>
             </div>
