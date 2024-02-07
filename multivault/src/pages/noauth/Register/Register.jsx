@@ -1,10 +1,68 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import registerBg from './registerBg.jpg'
 import { useNavigate } from "react-router-dom";
+
+import { auth } from '../../../firebase/firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 export default function Register() {
     const navigate = useNavigate();
     const [activeButton, setActiveButton] = useState('User');
+    // Registration Form
+    const [form, setForm] = useState({
+        firstName: '', 
+        lastName: '', 
+        sex: 'Male',
+        birthday: '',
+        email: '',
+        password: '',
+        companyName: '',
+        businessType: '',
+        businessDesc: '',
+        accountType: 'User'
+    });
+
+    // Clear Form
+    const clearForm = () => {
+        setForm({
+            firstName: '', 
+            lastName: '', 
+            sex: 'Male',
+            birthday: '',
+            email: '',
+            password: '',
+            companyName: '',
+            businessType: '',
+            businessDesc: '',
+            accountType: activeButton
+        });
+    }
+
+    // Updates whenever anything in the form changes
+    const handleChange = (e) => {
+        setForm({...form, [e.target.name]: e.target.value});
+    }
+
+    // Changes Account Type based on activeButton
+    useEffect(() => {
+        clearForm();
+    }, [activeButton])
+
+    // Activates upon clicking register button
+    const handleRegister = (e) => {
+        e.preventDefault();
+
+        createUserWithEmailAndPassword(auth, form.email, form.password)
+        .then((credentials) => {
+            console.log(credentials.user);
+            alert('Registration Successful');
+            // console.log("Current USer:", auth.currentUser?.email);
+        })
+        .catch((err) => {
+            console.error(err);
+            alert('Registration Error');
+        });
+    }
 
   return (
     <div style={{ backgroundImage:`url(${registerBg})` }} className='flex items-center justify-center h-screen'>
@@ -12,7 +70,8 @@ export default function Register() {
             <h1 className='text-center text-white text-8xl inter font-extrabold'>MultiVault</h1>
 
             {activeButton === 'User' ? (
-            <div className='sm:w-1/3 md:w-1/3 lg:w-1/3 h-fit mx-auto bg-slate-200 rounded-xl p-5 border'>
+            <form className='sm:w-1/3 md:w-1/3 lg:w-1/3 h-fit mx-auto bg-slate-200 rounded-xl p-5 border'
+            onSubmit={handleRegister}>
                 <div className='mb-6 text-center'>
                     <h2 className='font-bold text-2xl'>Sign up</h2>
                     <div className='text-white mt-3'>
@@ -32,12 +91,14 @@ export default function Register() {
                 <div className='mx-auto p-2 space-y-3'>
                     <div>
                         <h3>First Name</h3>
-                        <input type='text' placeholder='Enter your First Name' className='rounded-md p-2 w-full italic ps-3' />
+                        <input type='text' placeholder='Enter your First Name' className='rounded-md p-2 w-full italic ps-3'
+                        name='firstName' value={form.firstName} onChange={handleChange} required />
                     </div>
 
                     <div>
                         <h3>Last Name</h3>
-                        <input type='text' placeholder='Enter your Last Name' className='rounded-md p-2 w-full italic ps-3' />
+                        <input type='text' placeholder='Enter your Last Name' className='rounded-md p-2 w-full italic ps-3' 
+                        name='lastName' value={form.lastName} onChange={handleChange} required/>
                     </div>
 
                     <div className='grid sm:grid-cols-8 gap-5'>
@@ -48,39 +109,48 @@ export default function Register() {
                                 name="sex"
                                 autoComplete="sex"
                                 className="text-black block w-full rounded-md border-0 p-3"
+                                defaultValue='Male'
+                                onChange={handleChange}
+                                required
                             >
-                                <option value="Male" selected>Male</option>
+                                <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
                         </div>
 
                         <div className='sm:col-span-4'>
                             <h3>Birthday</h3>
-                            <input type='date' className='text-black block w-full rounded-md border-0 p-3'/>
+                            <input type='date' className='text-black block w-full rounded-md border-0 p-3'
+                            name='birthday' value={form.birthday} onChange={handleChange} required/>
                         </div>
                     
                     </div>
 
                     <div>
                         <h3>Email Address</h3>
-                        <input type='email' placeholder='Enter your email address' className='text-black block w-full rounded-md border-0 p-3'/>
+                        <input type='email' placeholder='Enter your email address' className='text-black block w-full rounded-md border-0 p-3'
+                        name='email' value={form.email} onChange={handleChange} required/>
                     </div>
 
                     <div>
                         <h3>Password</h3>
-                        <input type='password' placeholder='Enter your password' className='text-black block w-full rounded-md border-0 p-3'/>
+                        <input type='password' placeholder='Enter your password' className='text-black block w-full rounded-md border-0 p-3'
+                        name='password' value={form.password} onChange={handleChange} required/>
                     </div>
 
                 </div>
 
                 <div className='mx-auto p-2 mt-3 grid grid-cols-8 gap-5'>
                     <button onClick={() => navigate('/login')} className='text-white bg-zinc-500 w-full rounded-md p-2 hover:bg-zinc-400 col-span-4'>Cancel</button>
-                    <button className='text-white bg-amber-500 w-full rounded-md p-2 hover:bg-amber-400 col-span-4'>Register</button>
+                    <button className='text-white bg-amber-500 w-full rounded-md p-2 hover:bg-amber-400 col-span-4'
+                    type='submit'>Register</button>
                 </div>
-            </div>
+            </form>
             ) :  (<></>)}
 
-            {activeButton === 'Business' ? (<div className='sm:w-2/5 md:w-2/5 lg:w-2/5 h-fit mx-auto bg-slate-200 rounded-xl p-5 border'>
+            {activeButton === 'Business' ? (
+            <form className='sm:w-2/5 md:w-2/5 lg:w-2/5 h-fit mx-auto bg-slate-200 rounded-xl p-5 border'
+            onSubmit={handleRegister}>
                 <div className='mb-6 text-center'>
                     <h2 className='text-2xl'>Sign up</h2>
                     <div className='text-white mt-3'>
@@ -101,24 +171,28 @@ export default function Register() {
                     <div className='grid grid-cols-8 gap-5'>
                         <div className='col-span-4'>
                             <h3>Admin First Name</h3>
-                            <input type='text' placeholder='Enter your First Name' className='text-black block w-full rounded-md italic border-0 p-3'/>
+                            <input type='text' placeholder='Enter your First Name' className='text-black block w-full rounded-md italic border-0 p-3'
+                            name='firstName' value={form.firstName} onChange={handleChange} required />
                         </div>
 
                         <div className='col-span-4'>
                             <h3>Company Name </h3>
-                            <input type='text' placeholder='Enter Company Name' className='text-black block w-full rounded-md italic border-0 p-3'/>
+                            <input type='text' placeholder='Enter Company Name' className='text-black block w-full rounded-md italic border-0 p-3'
+                            name='companyName' value={form.companyName} onChange={handleChange} required />
                         </div>
                     </div>
 
                     <div className='grid grid-cols-8 gap-5'>
                         <div className='col-span-4'>
                             <h3>Admin Last Name</h3>
-                            <input type='text' placeholder='Enter your Last Name' className='text-black block w-full rounded-md italic border-0 p-3'/>
+                            <input type='text' placeholder='Enter your Last Name' className='text-black block w-full rounded-md italic border-0 p-3'
+                            name='lastName' value={form.lastName} onChange={handleChange} required />
                         </div>
 
                         <div className='col-span-4'>
                             <h3>Business Type</h3>
-                            <input type='text' placeholder='Enter Business Type' className='text-black block w-full rounded-md italic border-0 p-3'/>
+                            <input type='text' placeholder='Enter Business Type' className='text-black block w-full rounded-md italic border-0 p-3'
+                            name='businessType' value={form.businessType} onChange={handleChange} required />
                         </div>
                     </div>
 
@@ -132,43 +206,49 @@ export default function Register() {
                                         name="sex"
                                         autoComplete="sex"
                                         className="text-black block w-full rounded-md border-0 p-3"
+                                        defaultValue='Male'
+                                        onChange={handleChange}
+                                        required
                                     >
-                                        <option value="Male" selected>Male</option>
+                                        <option value="Male">Male</option>
                                         <option value="Female">Female</option>
                                     </select>
                                 </div>
 
                                 <div className='sm:col-span-4'>
                                     <h3>Birthday</h3>
-                                    <input type='date' className='text-black block w-full rounded-md italic border-0 p-3'/>
+                                    <input type='date' className='text-black block w-full rounded-md italic border-0 p-3'
+                                    name='birthday' value={form.birthday} onChange={handleChange} required />
                                 </div>
                             
                             </div>
 
                             <div>
                                 <h3>Email Address</h3>
-                                <input type='email' placeholder='Enter your email address' className='text-black block w-full rounded-md italic border-0 p-3'/>
+                                <input type='email' placeholder='Enter your email address' className='text-black block w-full rounded-md italic border-0 p-3'
+                                name='email' value={form.email} onChange={handleChange} required />
                             </div>
 
                             <div>
                                 <h3>Password</h3>
-                                <input type='password' placeholder='Enter your password' className='text-black block w-full rounded-md italic border-0 p-3'/>
+                                <input type='password' placeholder='Enter your password' className='text-black block w-full rounded-md italic border-0 p-3'
+                                name='password' value={form.password} onChange={handleChange} required />
                             </div>
                         </div>
 
                         <div className='col-span-4 flex flex-col'>
                             <h3>Business Description</h3>
-                            <textarea placeholder='Text' className='text-black block w-full h-full rounded-md italic border-0 p-3'/>
+                            <textarea placeholder='Text' className='text-black block w-full h-full rounded-md italic border-0 p-3'
+                            name='businessDesc' value={form.businessDesc} onChange={handleChange} required />
                         </div>
                     </div>
-
                 </div>
 
                 <div className='mx-20 mt-3'>
-                    <button className='text-white bg-amber-500 w-full rounded-md p-2 hover:bg-amber-400'>Register</button>
+                    <button className='text-white bg-amber-500 w-full rounded-md p-2 hover:bg-amber-400'
+                    type='submit'>Register</button>
                 </div>
-            </div>
-            
+            </form>
             ) : (<></>)}
         </div>
     </div>
