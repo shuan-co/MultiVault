@@ -2,12 +2,20 @@ import React, { useState, useEffect } from 'react'
 import registerBg from './registerBg.jpg'
 import { useNavigate } from "react-router-dom";
 
-import { auth } from '../../../firebase/firebase';
+import { auth, db } from '../../../firebase/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { collection, addDoc } from "firebase/firestore";
 
-export default function Register() {
+export default function Register({user}) {
+
     const navigate = useNavigate();
     const [activeButton, setActiveButton] = useState('User');
+    const usersCollectionRef = collection(db, "users");
+    
+    // Check if user exists
+    if (user) {
+        navigate('/private');
+    }
     // Registration Form
     const [form, setForm] = useState({
         firstName: '', 
@@ -54,13 +62,29 @@ export default function Register() {
 
         createUserWithEmailAndPassword(auth, form.email, form.password)
         .then((credentials) => {
-            console.log(credentials.user);
-            alert('Registration Successful');
             // console.log("Current USer:", auth.currentUser?.email);
+            addDoc(usersCollectionRef, {
+                uid: credentials.user.uid,
+                firstName: form.firstName,
+                lastName: form.lastName,
+                sex: form.sex,
+                birthday: form.birthday,
+                companyName: form.companyName,
+                businessType: form.businessType,
+                businessDesc: form.businessDesc,
+                accountType: form.accountType
+            })
+            .then(() => {
+                alert('Registration Successful');
+            })
+            .catch((err) => {
+                console.error(err);
+                alert('Registration Error: Firestore');
+            });
         })
         .catch((err) => {
             console.error(err);
-            alert('Registration Error');
+            alert('Registration Error: Authentication');
         });
     }
 

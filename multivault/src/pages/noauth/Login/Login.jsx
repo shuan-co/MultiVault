@@ -2,9 +2,14 @@ import React, { useState } from 'react'
 import loginBg from './loginBg.jpg'
 import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function Login({user}) {
     const navigate = useNavigate();
     const [activeButton, setActiveButton] = useState('User');
+
+    // Check if user exists
+    if (user) {
+      navigate('/private');
+    }
 
     const handleButtonClick = (button) => {
       setActiveButton(button);
@@ -46,8 +51,8 @@ export default function Login() {
           <div className='mx-20 mt-3'>
             <button className='text-white bg-amber-500 w-full rounded-md p-2 hover:bg-amber-400'>Sign in</button>
             <div className='text-center space-x-4 text-slate-400'>
-              <a href className='text-xs hover:underline underline-offset-4'>Forgot password</a>
-              <a href onClick={() => navigate('/register')} className='text-xs hover:underline underline-offset-4'>Create an account</a>
+              <a href='' className='text-xs hover:underline underline-offset-4'>Forgot password</a>
+              <a href='' onClick={() => navigate('/register')} className='text-xs hover:underline underline-offset-4'>Create an account</a>
             </div>
           </div>
         </div>
