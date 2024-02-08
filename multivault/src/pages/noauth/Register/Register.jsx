@@ -80,6 +80,14 @@ export default function Register({user}) {
             .catch((err) => {
                 console.error(err);
                 alert('Registration Error: Firestore');
+                // Delete authenticated user if firestore storing fails
+                auth.currentUser?.delete()
+                .then(() => {
+                    console.log("Firestore Failed: User Deleted");
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
             });
         })
         .catch((err) => {
