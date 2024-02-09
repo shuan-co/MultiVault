@@ -1,20 +1,27 @@
+// App.js
 import React, { useState } from 'react';
-import Inventory from './pages/auth/Inventory';
-import AddItem from './pages/auth/AddItem';
-
+import SideNav from './pages/auth/Inventory/SideNav';
+import Inventory from './pages/auth/Inventory/Inventory';
+import AddItem from './pages/auth/Inventory/AddItem';
 
 function App() {
-  const [items, setItems] = useState(['Item 1', 'Item 2', 'Item 3']);
+  const [items, setItems] = useState([]);
+  const [showAddItem, setShowAddItem] = useState(false); // State to control the AddItem modal
 
-  const handleAddItem = (itemName) => {
-    setItems([...items, itemName]);
+  const handleAddItem = (item) => {
+    setItems([...items, item]);
+    setShowAddItem(false); // Close the modal after item is added
   };
 
   return (
     <div className="App">
-      <h1>Inventory Management System</h1>
-      <AddItem onAdd={handleAddItem} />
-      <Inventory items={items} />
+      <SideNav />
+      <div className="content">
+        <main>
+          <Inventory items={items} onShowAddItem={() => setShowAddItem(true)} />
+          <AddItem onAdd={handleAddItem} show={showAddItem} onHide={() => setShowAddItem(false)} />
+        </main>
+      </div>
     </div>
   );
 }

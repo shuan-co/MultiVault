@@ -1,0 +1,91 @@
+/* Title section */
+.title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    background: #bbb6b6;
+    border-radius: 6px;
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .dropdown-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .dropdown-toggle {
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 800px;
+    padding: 10px 20px; /* Increase padding for larger button */
+    border-radius: 6px;
+    background-color: #ff8800; /* Button background color */
+    color: #fff; /* Button text color */
+    border: none;
+    cursor: pointer;
+  }
+  
+  .dropdown-menu {
+    min-width: 120px; /* Set minimum width for the dropdown menu */
+  }
+  
+  .dropdown-item {
+    font-size: 14px;
+    color: #333; /* Dropdown item text color */
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f0f0f0; /* Hover background color */
+  }
+
+
+  .add-button {
+    padding: 10px 20px;
+    background-color: #ff8800;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+  }
+  
+.pagination-container {
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+    margin-top: 20px; /* Adjust margin as needed */
+  }
+/* Styles for pagination numbers and icons */
+.pagination-container .pagination .page-item {
+    display: inline-block;
+    margin: 0 5px; /* Spacing between pagination items */
+  }
+  
+  .pagination-container .pagination .page-link {
+    color: #5E6977; /* Default color */
+    background-color: transparent; /* Removes background */
+    border: none; /* Removes border */
+  }
+  
+  .pagination-container .pagination .page-item.active .page-link {
+    color: #FFA500; /* Active color */
+  }
+  
+  .pagination-container .pagination .page-item a:hover {
+    color: #FFA500; /* Hover color */
+  }
+  
+  /* Specific styles for Font Awesome icons inside pagination */
+  .pagination-container .pagination .page-item a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Hide the text for accessibility if any remains */
+  .pagination-container .pagination .page-item .visually-hidden {
+    display: none;
+  }
+  

@@ -1,0 +1,96 @@
+body, html {
+  height: 100%; /* Ensure the html and body are also taking the full height */
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Main container */
+.main-container {
+  display: grid;
+  grid-template-columns: 1fr 3fr; /* Sidebar and main content ratio */
+  gap: 20px;
+  padding: 20px;
+  background: #f0f4f8; /* Light gray background to match the UI design */
+  height: 100vh; /* Set to the height of the viewport */
+  box-sizing: border-box; /* Includes padding in the height calculation */
+  overflow: hidden; /* Ensures no scrollbars appear */
+}
+
+/* Inventory content */
+.inventory-content {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 40px - 20px); /* Adjust this calculation based on your header/footer/padding */
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+/* Inventory grid */
+.inventory {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 items per row */
+  gap: 20px; /* Increase gap for more space between items */
+  align-content: start; /* Aligns grid items to the top of the container */
+}
+
+/* Individual item */
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  background: #bbb6b6;
+  border-radius: 6px;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px; /* Separation between rows */
+  min-height: 250px; /* Adjust min-height as needed for bigger items */
+}
+
+/* Set a fixed height for the images */
+.item img {
+  width: 100%; /* Set image width to fill the container */
+  height: 150px; /* Fixed height for all images */
+  object-fit: cover;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+.item-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center item details */
+  width: 100%; /* Ensure the details fill the item container */
+}
+
+.item-name,
+.item-description,
+.item-quantity,
+.item-status,
+.item-expiry {
+  font-size: 14px;
+  color: #43484D;
+  margin-bottom: 5px;
+  text-align: center; /* Center-align the text */
+}
+
+.item-quantity,
+.item-expiry {
+  font-weight: 300;
+  color: #86939E;
+}
+
+/* Responsive grid for smaller screens */
+@media (max-width: 1024px) {
+  .inventory {
+    grid-template-columns: repeat(2, 1fr); /* Two items per row on medium screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .inventory {
+    grid-template-columns: repeat(1, 1fr); /* One item per row on small screens */
+  }
+}
