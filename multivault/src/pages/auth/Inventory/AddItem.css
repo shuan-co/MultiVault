@@ -1,6 +1,6 @@
 .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: #ff8800;
+    border-color: #ff8800;
     color: #fff;
     padding: 10px 20px;
     border-radius: 5px;
@@ -9,8 +9,8 @@
   }
   
   .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+    background-color: #ff8800;
+    border-color: #ff8800;
   }
   
   .modal-dialog {
@@ -28,9 +28,9 @@
 
   .modal-content {
     border-radius: 10px;
-    border: 2px solid #007bff;
+    border: 2px solid #ff8800;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-    background: #007bff;
+    background: #ff8800;
   }
   
   .modal-body form {
@@ -48,7 +48,7 @@
   }
   
   .modal-body form button {
-    background-color: #007bff;
+    background-color: #ff8800;
     color: #fff;
     cursor: pointer;
     transition: all 0.3s ease;

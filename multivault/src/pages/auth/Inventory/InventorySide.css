@@ -1,7 +1,7 @@
 /* Sidebar styles */
 .sidebar {
-    background: #ffffff;
-    padding: 20px;
+    background: #bbb6b6;
+    padding: 30px;
     border-radius: 6px;
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
   }
@@ -12,6 +12,40 @@
     margin-bottom: 10px;
   }
   
+  .profile {
+    text-align: center;
+  }
+  
+  .profile-image {
+    width: 100px; /* Adjust as needed */
+    height: 100px; /* Adjust as needed */
+    border-radius: 50%; /* Make the image circular */
+  }
+  
+  .profile-name {
+    margin-top: 10px;
+  }
+  
+  .button-container {
+    margin-top: 20px;
+  }
+  
+  .sidebar-button {
+    display: block;
+    width: 100%;
+    padding: 30px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    background-color: #7c7d80; /* Adjust button color */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .sidebar-button:hover {
+    background-color: #0056b3; /* Adjust button color on hover */
+  }
 
   
   /* Main container adjustments for smaller screens */

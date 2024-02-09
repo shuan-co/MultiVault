@@ -42,6 +42,16 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
   return (
     <div className="main-container">
       <div className="sidebar">
+        <div className="profile">
+          <img src="profile-image-url" alt="Profile" className="profile-image" />
+            <h3 className="profile-name">John Doe</h3>
+              <div className="button-container">
+                <button className="sidebar-button">Button 1</button>
+                <button className="sidebar-button">Button 2</button>
+                <button className="sidebar-button">Button 3</button>
+                <button className="sidebar-button">Button 4</button>
+       </div>
+      </div>
       </div>
       <div className="inventory-content"> 
         <div className="header">
