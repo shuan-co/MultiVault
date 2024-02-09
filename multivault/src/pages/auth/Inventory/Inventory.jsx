@@ -65,7 +65,6 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
               <Dropdown.Menu>
                 <Dropdown.Item onClick={() => setSortBy('Name')}>Name</Dropdown.Item>
                 <Dropdown.Item onClick={() => setSortBy('Quantity')}>Quantity</Dropdown.Item>
-                {/* Add more options as needed */}
               </Dropdown.Menu>
             </Dropdown>
             <button className="add-button" onClick={onShowAddItem}>ADD</button>

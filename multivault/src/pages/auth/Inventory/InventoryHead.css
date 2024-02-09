@@ -18,25 +18,25 @@
     font-size: 16px;
     font-weight: bold;
     margin-right: 800px;
-    padding: 10px 20px; /* Increase padding for larger button */
+    padding: 10px 20px;
     border-radius: 6px;
-    background-color: #ff8800; /* Button background color */
-    color: #fff; /* Button text color */
+    background-color: #ff8800;
+    color: #fff; 
     border: none;
     cursor: pointer;
   }
   
   .dropdown-menu {
-    min-width: 120px; /* Set minimum width for the dropdown menu */
+    min-width: 120px; 
   }
   
   .dropdown-item {
     font-size: 14px;
-    color: #333; /* Dropdown item text color */
+    color: #333; 
   }
   
   .dropdown-item:hover {
-    background-color: #f0f0f0; /* Hover background color */
+    background-color: #f0f0f0; 
   }
 
 
@@ -54,37 +54,35 @@
   
 .pagination-container {
     display: flex;
-    justify-content: center; /* Center items horizontally */
-    margin-top: 20px; /* Adjust margin as needed */
+    justify-content: center; 
+    margin-top: 20px;
   }
-/* Styles for pagination numbers and icons */
+
 .pagination-container .pagination .page-item {
     display: inline-block;
-    margin: 0 5px; /* Spacing between pagination items */
+    margin: 0 5px; 
   }
   
   .pagination-container .pagination .page-link {
-    color: #5E6977; /* Default color */
-    background-color: transparent; /* Removes background */
-    border: none; /* Removes border */
+    color: #5E6977;
+    background-color: transparent; 
+    border: none;
   }
   
   .pagination-container .pagination .page-item.active .page-link {
-    color: #FFA500; /* Active color */
+    color: #FFA500; 
   }
   
   .pagination-container .pagination .page-item a:hover {
-    color: #FFA500; /* Hover color */
+    color: #FFA500; 
   }
   
-  /* Specific styles for Font Awesome icons inside pagination */
   .pagination-container .pagination .page-item a {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  
-  /* Hide the text for accessibility if any remains */
+
   .pagination-container .pagination .page-item .visually-hidden {
     display: none;
   }

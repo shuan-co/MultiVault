@@ -17,9 +17,9 @@
   }
   
   .profile-image {
-    width: 100px; /* Adjust as needed */
-    height: 100px; /* Adjust as needed */
-    border-radius: 50%; /* Make the image circular */
+    width: 100px; 
+    height: 100px; 
+    border-radius: 50%;
   }
   
   .profile-name {
@@ -36,7 +36,7 @@
     padding: 30px;
     margin-top: 30px;
     margin-bottom: 10px;
-    background-color: #7c7d80; /* Adjust button color */
+    background-color: #7c7d80; 
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -44,19 +44,19 @@
   }
   
   .sidebar-button:hover {
-    background-color: #0056b3; /* Adjust button color on hover */
+    background-color: #0056b3; 
   }
 
   
-  /* Main container adjustments for smaller screens */
+ 
   @media (max-width: 768px) {
     .main-container {
-      grid-template-columns: 1fr; /* Stack sidebar and content on top of each other on small screens */
+      grid-template-columns: 1fr; 
     }
   
     .title,
     .pagination-container {
-      grid-column: auto; /* Reset to stack properly on small screens */
+      grid-column: auto; 
     }
   }
   
