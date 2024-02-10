@@ -22,7 +22,6 @@ body, html {
   display: flex;
   flex-direction: column;
   height: calc(100vh - 40px - 20px); 
-  background: #ffffff;
   border-radius: 6px;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
   padding: 20px;
@@ -32,8 +31,9 @@ body, html {
 .inventory {
   display: grid;
   grid-template-columns: repeat(4, 1fr); 
-  gap: 20px; 
+  gap: 15px; 
   align-content: start; 
+  margin-left:3%;
 }
 
 .item-name {
@@ -51,18 +51,19 @@ body, html {
   flex-direction: column;
   align-items: center;
   justify-content: start;
-  background: #bbb6b6;
+  background: #eeebeb;
   border-radius: 6px;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
   padding: 20px;
   margin-bottom: 20px; 
   min-height: 250px; 
+  width:70%;
 }
 
 /* Set a fixed height for the images */
 .item img {
   width: 100%;
-  height: 150px; 
+  height: 140px; 
   object-fit: cover;
   margin-bottom: 15px;
   border-radius: 4px;
@@ -102,7 +103,6 @@ body, html {
 
 .item img {
   width: 100%;
-  height: auto; 
   margin-bottom: 10px;
   border-radius: 4px;
 }

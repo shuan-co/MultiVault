@@ -50,7 +50,7 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
     <div className="main-container">
        <div className="sidebar">
          <div className="profile">
-           <img src="profile-image-url" alt="Profile" className="profile-image" />
+           <img src="https://www.pinclipart.com/picdir/middle/148-1486972_mystery-man-avatar-circle-clipart.png" alt="Profile" className="profile-image" />
              <h3 className="profile-name">John Doe</h3>
                <div className="button-container">
                  <button className="sidebar-button">Button 1</button>
@@ -58,6 +58,7 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
                  <button className="sidebar-button">Button 3</button>
                  <button className="sidebar-button">Button 4</button>
                </div>
+               <button className="sidebar-button"></button>
           </div> 
        </div>
       <div className="inventory-content"> 
@@ -81,25 +82,25 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
           {currentItems.length > 0 ? (
              currentItems.map((item, index) => (
                 <div key={index} className="item">
-                  {item.image && <img src={item.image} alt={item.name} />}
+                  <img src={item.image || "https://raw.githubusercontent.com/shuan-co/MultiVault/feature/firebase_registration/multivault/src/pages/noauth/Login/loginBg.jpg?token=GHSAT0AAAAAACH6U6KGEXWRX7AF3K2QVACCZOG7U2A"} alt={item.name || "Default placeholder"} />
                   <div className="item-name">
                   <span className="item-value-name">{item.name}</span>
                     </div>
                   <div className="item-details">
                   <div className="item-row">
-                     <span className="item-title">Description:</span>
+                     <span className="item-title">DESCRIPTION:</span>
                      <span className="item-value">{item.description}</span>
                   </div>
                   <div className="item-row">
-                     <span className="item-title">Perishable:</span>
+                     <span className="item-title">PERISHABLE:</span>
                      <span className="item-value">{item.status}</span>
                   </div>
                   <div className="item-row">
-                     <span className="item-title">Quantity:</span>
+                     <span className="item-title">QTY:</span>
                      <span className="item-value">{item.quantity}</span>
                   </div>
                   <div className="item-row">
-                     <span className="item-title">Expiry:</span>
+                     <span className="item-title">EXP:</span>
                      <span className="item-value">{item.expiry}</span>
                   </div>
                  </div>
