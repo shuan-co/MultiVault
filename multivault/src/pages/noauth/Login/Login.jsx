@@ -22,24 +22,17 @@ export default function Login() {
 		setLoading(true);
 
 		try {
-			var email = document.getElementById('email-input').value;
-			var password = document.getElementById('password-input').value;
+			var emailInput = document.getElementById('email-input').value;
+			var passwordInput = document.getElementById('password-input').value;
 
-			const userCredential = await signInWithEmailAndPassword(auth, email, password).then(
-				cred => {
-					console.log(cred);
-					const idToken = cred.user.getIdToken();
-					console.log( 'idToken: ' );
-					console.log( idToken );
-				},
-				alert('Login Successful')
-			);
+			const userCredential = await signInWithEmailAndPassword(auth, emailInput, passwordInput);
 			const user = userCredential.user;
 			const userToken = await user.getIdToken();
+			alert('Login Successful')
 			handleRedirect( user.accountType );
-			
 		} catch( error ) {
 			setError( 'Invalid email or password' );
+			alert('Invalid Credentials')
 			setPassword( '' );	// clear password field
 		}
 	}
