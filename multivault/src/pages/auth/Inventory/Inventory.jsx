@@ -3,6 +3,7 @@ import './Inventory.css'
 import './InventoryHead.css'
 import './InventorySide.css'
 import { Pagination, Dropdown, Form } from 'react-bootstrap';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight, faAngleDown} from '@fortawesome/free-solid-svg-icons';
 
@@ -27,6 +28,12 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
 
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleToggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+  
   const handlePrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
@@ -41,30 +48,30 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
 
   return (
     <div className="main-container">
-      <div className="sidebar">
-        <div className="profile">
-          <img src="profile-image-url" alt="Profile" className="profile-image" />
-            <h3 className="profile-name">John Doe</h3>
-              <div className="button-container">
-                <button className="sidebar-button">Button 1</button>
-                <button className="sidebar-button">Button 2</button>
-                <button className="sidebar-button">Button 3</button>
-                <button className="sidebar-button">Button 4</button>
+       <div className="sidebar">
+         <div className="profile">
+           <img src="profile-image-url" alt="Profile" className="profile-image" />
+             <h3 className="profile-name">John Doe</h3>
+               <div className="button-container">
+                 <button className="sidebar-button">Button 1</button>
+                 <button className="sidebar-button">Button 2</button>
+                 <button className="sidebar-button">Button 3</button>
+                 <button className="sidebar-button">Button 4</button>
+               </div>
+          </div> 
        </div>
-      </div>
-      </div>
       <div className="inventory-content"> 
         <div className="header">
         <h2 className="title">
             Sort By:
-            <Dropdown>
-              <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+            <Dropdown show={dropdownOpen} onToggle={() => {}}>
+              <Dropdown.Toggle variant="secondary" id="dropdown-basic" onClick={handleToggleDropdown}>
                 {sortBy}
                 <FontAwesomeIcon icon={faAngleDown} style={{ marginLeft: '5px' }} />
               </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => setSortBy('Name')}>Name</Dropdown.Item>
-                <Dropdown.Item onClick={() => setSortBy('Quantity')}>Quantity</Dropdown.Item>
+              <Dropdown.Menu show={dropdownOpen}>
+                <Dropdown.Item onClick={() => { setSortBy('Name'); setDropdownOpen(false); }}>Name</Dropdown.Item>
+                <Dropdown.Item onClick={() => { setSortBy('Quantity'); setDropdownOpen(false); }}>Quantity</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
             <button className="add-button" onClick={onShowAddItem}>ADD</button>
@@ -72,21 +79,35 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
         </div>
         <div className="inventory">
           {currentItems.length > 0 ? (
-            currentItems.map((item, index) => (
-              <div key={index} className="item">
-                {item.image && <img src={item.image} alt={item.name} />}
-                <div className="item-details">
-                  <span className="item-name">Name: {item.name}</span>
-                  <span className="item-description">Description: {item.description}</span>
-                  <span className="item-status">Perishable: {item.status}</span>
-                  <span className="item-quantity">Quantity: {item.quantity}</span>
-                  <span className="item-expiry">Expiry: {item.expiry}</span> 
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="no-items">No items available</div>
-          )}
+             currentItems.map((item, index) => (
+                <div key={index} className="item">
+                  {item.image && <img src={item.image} alt={item.name} />}
+                  <div className="item-name">
+                  <span className="item-value-name">{item.name}</span>
+                    </div>
+                  <div className="item-details">
+                  <div className="item-row">
+                     <span className="item-title">Description:</span>
+                     <span className="item-value">{item.description}</span>
+                  </div>
+                  <div className="item-row">
+                     <span className="item-title">Perishable:</span>
+                     <span className="item-value">{item.status}</span>
+                  </div>
+                  <div className="item-row">
+                     <span className="item-title">Quantity:</span>
+                     <span className="item-value">{item.quantity}</span>
+                  </div>
+                  <div className="item-row">
+                     <span className="item-title">Expiry:</span>
+                     <span className="item-value">{item.expiry}</span>
+                  </div>
+                 </div>
+               </div>
+             ))
+           ) : (
+               <div className="no-items">No items available</div>
+           )}
         </div>
         <div className="pagination-container">
          <Pagination>

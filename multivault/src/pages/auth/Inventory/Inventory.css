@@ -36,6 +36,15 @@ body, html {
   align-content: start; 
 }
 
+.item-name {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  color: #43484D;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
 /* Individual item */
 .item {
   display: flex;
@@ -58,29 +67,53 @@ body, html {
   margin-bottom: 15px;
   border-radius: 4px;
 }
+
 .item-details {
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  width: 100%; 
+  padding: 10px;
+  border-radius: 4px;
+  margin: 8px 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.item-name,
-.item-description,
-.item-quantity,
-.item-status,
-.item-expiry {
+.item-row {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.item-title {
   font-size: 14px;
   color: #43484D;
-  margin-bottom: 5px;
-  text-align: center;
+  font-weight: bold;
+  margin-right: 5px;
 }
 
-.item-quantity,
-.item-expiry {
-  font-weight: 300;
-  color: #86939E;
+.item-value {
+  font-size: 14px;
+  color: #43484D;
+  text-align: left;
+  width: 100%;
 }
+
+/* Additional styles for image to make it align with the design */
+.item img {
+  width: 100%; /* Adjust width as needed */
+  height: auto; /* Adjust height as needed */
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+/* You might need additional responsive styles */
+@media (max-width: 768px) {
+  .item-details {
+    /* Adjust styles for mobile if necessary */
+  }
+}
+
 
 @media (max-width: 1024px) {
   .inventory {
