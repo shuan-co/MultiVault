@@ -28,8 +28,6 @@ const AddItem = ({ onAdd, show, onHide }) => {
 
   return (
     <>
-      {/* Removed the Button component that shows the modal since it's now in the Inventory component */}
-
       <Modal show={show} onHide={onHide} centered>
         <Modal.Header closeButton>
           <Modal.Title>Add Item</Modal.Title>

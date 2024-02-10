@@ -99,18 +99,17 @@ body, html {
   width: 100%;
 }
 
-/* Additional styles for image to make it align with the design */
+
 .item img {
-  width: 100%; /* Adjust width as needed */
-  height: auto; /* Adjust height as needed */
+  width: 100%;
+  height: auto; 
   margin-bottom: 10px;
   border-radius: 4px;
 }
 
-/* You might need additional responsive styles */
+
 @media (max-width: 768px) {
   .item-details {
-    /* Adjust styles for mobile if necessary */
   }
 }
 

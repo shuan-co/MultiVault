@@ -10,15 +10,15 @@
 }
 
 .btn-primary:hover {
-  background-color: #cc7000; /* Slightly darker for hover effect */
+  background-color: #cc7000;
   border-color: #cc7000;
 }
 
-/* Modal dialog styles */
+
 .modal-dialog {
-  position: fixed; /* Fixed position to place the modal above other content */
-  top: 50%; /* Position at half the height of the viewport */
-  left: 50%; /* Position at half the width of the viewport */
+  position: fixed; 
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%); 
   z-index: 1050;
   width: auto; 
@@ -31,29 +31,29 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-  z-index: 1040; /* Behind the modal, but above other content */
+  background-color: rgba(0, 0, 0, 0.5); 
+  z-index: 1040; 
 }
 
 .modal-content {
   border-radius: 10px;
-  border: none; /* Removing the border */
+  border: none; 
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-  background: #fff; /* Light background for the content */
+  background: #fff; 
 }
 
-/* Modal body form styles */
+
 .modal-body form {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Increase the gap for better spacing */
+  gap: 15px; 
 }
 
 .modal-body form input,
 .modal-body form button {
   padding: 10px;
   border-radius: 5px;
-  border: 1px solid #ddd; /* Lighter border for inputs */
+  border: 1px solid #ddd; 
   font-size: 1em;
 }
 
@@ -64,13 +64,13 @@
 }
 
 .modal-body form button:hover {
-  background-color: #cc7000; /* Slightly darker for hover effect */
+  background-color: #cc7000;
 }
 
 /* Close button styles */
 .close {
-  color: #000; /* Changing color to black for visibility */
-  opacity: 1; /* Making the button fully opaque */
+  color: #000; 
+  opacity: 1;
   outline: none;
   border: none;
   background: transparent; 
