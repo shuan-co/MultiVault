@@ -1,10 +1,9 @@
 // Login.jsx where authentication is done through Firebase Authetication
-
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import loginBg from './loginBg.jpg'
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword, setPersistence } from 'firebase/auth';
-import { auth } from 'firebase/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth, db } from '../../../firebase/Firebase';
 
 export default function Login() {
     const navigate = useNavigate();
@@ -12,6 +11,7 @@ export default function Login() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleButtonClick = (button) => {
       	setActiveButton(button);
@@ -19,10 +19,21 @@ export default function Login() {
 
 	const handleLogin = async(e) => {
 		e.preventDefault();
-		try {
-			await setPersistence( auth, 'session' );
+		setLoading(true);
 
-			const userCredential = await signInWithEmailAndPassword(auth, email, password);
+		try {
+			var email = document.getElementById('email-input').value;
+			var password = document.getElementById('password-input').value;
+
+			const userCredential = await signInWithEmailAndPassword(auth, email, password).then(
+				cred => {
+					console.log(cred);
+					const idToken = cred.user.getIdToken();
+					console.log( 'idToken: ' );
+					console.log( idToken );
+				},
+				alert('Login Successful')
+			);
 			const user = userCredential.user;
 			const userToken = await user.getIdToken();
 			handleRedirect( user.accountType );
@@ -77,21 +88,21 @@ export default function Login() {
 					<div className='mx-auto p-2 space-y-3'>
 						<div>
 							<h3>Email</h3>
-							<input type='email' placeholder='Enter your email' className='rounded-md p-2 w-full italic ps-3' value={email} onChange={(e) => setEmail(e.target.value)} />
+							<input type='email' id = 'email-input' placeholder='Enter your email' className='rounded-md p-2 w-full italic ps-3' />
 						</div>
 						<div>
 							<h3>Password</h3>
-							<input type='password' placeholder='Enter your password' className='rounded-md p-2 w-full italic ps-3' />
+							<input type='password' id = 'password-input' placeholder='Enter your password' className='rounded-md p-2 w-full italic ps-3' />
 						</div>
 					</div>
-				</form>
 				<div className='mx-20 mt-3'>
-					<button className='text-white bg-amber-500 w-full rounded-md p-2 hover:bg-amber-400'>Sign in</button>
+					<button type = 'submit' className='text-white bg-amber-500 w-full rounded-md p-2 hover:bg-amber-400'>Sign in</button>
 					<div className='text-center space-x-4 text-slate-400'>
 						<a href className='text-xs hover:underline underline-offset-4'>Forgot password</a>
 						<a href onClick={() => navigate('/register')} className='text-xs hover:underline underline-offset-4'>Create an account</a>
 					</div>
 				</div>
+				</form>
         	</div>
     	</div>
     </div>
