@@ -6,20 +6,11 @@ import { auth } from './firebase/firebase.js';
 import Login from './pages/noauth/Login/Login.jsx';
 import Register from './pages/noauth/Register/Register.jsx';
 import { Private } from './pages/auth/Private.jsx';
-import SideNav from './pages/auth/Inventory/SideNav';
-import Inventory from './pages/auth/Inventory/Inventory';
-import AddItem from './pages/auth/Inventory/AddItem';
+import Inventorypage from './pages/auth/Inventory/Inventorypage.jsx';
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [items, setItems] = useState([]);
-  const [showAddItem, setShowAddItem] = useState(false);
-
-  const handleAddItem = (item) => {
-    setItems([...items, item]);
-    setShowAddItem(false);
-  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (authUser) => {
@@ -46,6 +37,7 @@ const App = () => {
               <Route path="/login" element={<Login user={user} />} />
               <Route path="/register" element={<Register user={user} />} />
               <Route path="/private" element={<ProtectedRoute user={user} children={<Private />} />} />
+              <Route path="/inventory" element={<ProtectedRoute user={user} children={<Inventorypage />} />} />
             </Routes>
           </BrowserRouter>
         )}

@@ -30,10 +30,13 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const handleToggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
+  const handleToggleDropdown = (isOpen) => {
+    console.log("Dropdown state before:", dropdownOpen);
+    setDropdownOpen(isOpen);
+    console.log("Dropdown state after:", dropdownOpen);
   };
-  
+
+
   const handlePrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
@@ -65,12 +68,12 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
         <div className="header">
         <h2 className="title">
             Sort By:
-            <Dropdown show={dropdownOpen} onToggle={() => {}}>
-              <Dropdown.Toggle variant="secondary" id="dropdown-basic" onClick={handleToggleDropdown}>
+            <Dropdown show={dropdownOpen} onToggle={handleToggleDropdown}>
+              <Dropdown.Toggle variant="secondary" id="dropdown-basic">
                 {sortBy}
                 <FontAwesomeIcon icon={faAngleDown} style={{ marginLeft: '5px' }} />
               </Dropdown.Toggle>
-              <Dropdown.Menu show={dropdownOpen}>
+              <Dropdown.Menu>
                 <Dropdown.Item onClick={() => { setSortBy('Name'); setDropdownOpen(false); }}>Name</Dropdown.Item>
                 <Dropdown.Item onClick={() => { setSortBy('Quantity'); setDropdownOpen(false); }}>Quantity</Dropdown.Item>
               </Dropdown.Menu>
