@@ -14,7 +14,6 @@ function Inventorypage() {
 
   return (
     <div className="Inventorypage">
-      <SideNav />
       <div className="content">
         <main>
           <Inventory items={items} onShowAddItem={() => setShowAddItem(true)} />

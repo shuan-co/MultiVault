@@ -85,7 +85,7 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
           {currentItems.length > 0 ? (
              currentItems.map((item, index) => (
                 <div key={index} className="item">
-                  <img src={item.image || "https://raw.githubusercontent.com/shuan-co/MultiVault/feature/firebase_registration/multivault/src/pages/noauth/Login/loginBg.jpg?token=GHSAT0AAAAAACH6U6KGEXWRX7AF3K2QVACCZOG7U2A"} alt={item.name || "Default placeholder"} />
+                  <img src={item.image || "https://lh3.googleusercontent.com/proxy/ua8hNK96q9w_uMC3uKo2sYYPj0tyDTEKnm-LFkBt78dRYVdTRMI22L-KlAm2wTQW2MQSLVfLCdTtXdqkC2n7RJc9N9JDQoZM7hYlCCXusXho1gTfnjZiZQk3UHMQjZRJ"} alt={item.name || "Default placeholder"} />
                   <div className="item-name">
                   <span className="item-value-name">{item.name}</span>
                     </div>
