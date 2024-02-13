@@ -1,10 +1,8 @@
 // Login2.jsx where authentication is done through a "separate" back-end endpoint
 
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import loginBg from './loginBg.jpg'
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../../../firebase/Firebase';
 
 export default function Login() {
     const navigate = useNavigate();

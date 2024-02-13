@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react'
 import loginBg from './loginBg.jpg'
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../../../firebase/Firebase';
+import { auth, db } from '../../../firebase/firebase';
 
 export default function Login() {
     const navigate = useNavigate();
