@@ -9,8 +9,9 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/user-event": "^13.5.0",
     "firebase": "^10.7.2",
+    "font-awesome": "^4.7.0",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.10.0",
+    "react-bootstrap": "^2.10.1",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.0",
     "react-scripts": "5.0.1",
@@ -35,14 +36,6 @@
       "jsx",
       "json",
       "node"
-    ],
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__mocks__/fileMock.js",
-      "\\.(css|less)$": "identity-obj-proxy"
-    },
-    "testEnvironment": "jsdom",
-    "setupFilesAfterEnv": [
-      "./jest.setup.js"
     ]
   },
   "browserslist": {
@@ -57,19 +50,7 @@
       "last 1 safari version"
     ]
   },
-    ]
-  },
-  "jest": {
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.jsx?$",
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
-  },
   "devDependencies": {
-    "tailwindcss": "^3.4.1",
     "@babel/preset-env": "^7.23.9",
     "@babel/preset-react": "^7.23.3",
     "@testing-library/react": "^14.2.1",
