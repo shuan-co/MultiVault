@@ -1,0 +1,98 @@
+/* Button styles */
+.btn-primary {
+  background-color: #ff8800;
+  border-color: #ff8800;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1em;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #cc7000;
+  border-color: #cc7000;
+}
+
+
+.modal-dialog {
+  position: fixed; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+  z-index: 1050;
+  width: auto; 
+  max-width: 500px; 
+}
+
+.modal-backdrop.show {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); 
+  z-index: 1040; 
+}
+
+.modal-content {
+  border-radius: 10px;
+  border: none; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  background: #fff; 
+}
+
+
+.modal-body form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; 
+}
+
+.modal-body form input,
+.modal-body form button {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd; 
+  font-size: 1em;
+}
+
+.modal-body form button {
+  background-color: #ff8800;
+  color: #fff;
+  cursor: pointer;
+}
+
+.modal-body form button:hover {
+  background-color: #cc7000;
+}
+
+/* Close button styles */
+.close {
+  color: #000; 
+  opacity: 1;
+  outline: none;
+  border: none;
+  background: transparent; 
+}
+
+.close:hover {
+  color: #f00;
+}
+
+.modal-header {
+  border-bottom: none; 
+  padding: 20px; 
+  display: flex;
+  justify-content: space-between; 
+}
+
+.modal-title {
+  color: #ff8800;
+}
+
+.inventory-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
