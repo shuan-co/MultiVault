@@ -52,12 +52,11 @@ const AddItem = ({ onAdd, show, onHide }) => {
               value={itemQuantity}
               onChange={(e) => setItemQuantity(e.target.value)}
             />
-            <input
-              type="text"
-              placeholder="Enter item status"
-              value={itemStatus}
-              onChange={(e) => setItemStatus(e.target.value)}
-            />
+            <select value={itemStatus} onChange={(e) => setItemStatus(e.target.value)}>
+              <option value="">Select Status</option>
+              <option value="Perishable">Perishable</option>
+              <option value="Non-Perishable">Non-Perishable</option>
+            </select>
             <input
               type="file"
               onChange={handleImageChange}

@@ -56,6 +56,30 @@
     display: none;
   }
 
+.filter-buttons {
+  display: flex;
+  gap: 10px; 
+}
+
+.filter-buttons button {
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #5E6977; 
+  border: none;
+  border-radius: 4px; 
+  cursor: pointer;
+  transition: background-color 0.3s ease; 
+}
+
+.filter-buttons button.active {
+  background-color: #FFA500;
+}
+
+.filter-buttons button:hover {
+  background-color: #ff8800; 
+}
+
   .add-button {
     padding: 10px 20px;
     background-color: #ff8800;

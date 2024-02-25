@@ -1,52 +1,57 @@
 import React, { useState, useMemo } from 'react';
-import './Inventory.css'
-import './InventoryHead.css'
-import './InventorySide.css'
-import { Pagination, Dropdown, Form } from 'react-bootstrap';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
+import './Inventory.css';
+import './InventoryHead.css';
+import './InventorySide.css';
+import { Pagination, Dropdown } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight, faAngleDown} from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faAngleRight, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
-  const filteredItems = useMemo(() => {
-    if (activeSubPage === 'all') {
-      return items;
-    } else if (activeSubPage === 'low-stock') {
-      return items.filter((item) => item.quantity <= 50)
-    } else {
-      return items;
-    }
-  }, [items, activeSubPage]);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
+  const [sortBy, setSortBy] = useState('Name');
+  const [filterBy, setFilterBy] = useState('All'); // Added state for filtering
+
+  // Adding dropdownOpen state for the Dropdown toggle functionality
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const filteredItems = useMemo(() => {
+    let tempItems = items;
+
+    // Filter by activeSubPage
+    if (activeSubPage === 'low-stock') {
+      tempItems = items.filter(item => item.quantity <= 50);
+    }
+
+    // Filter by perishable status
+    if (filterBy === 'Perishable') {
+      tempItems = tempItems.filter(item => item.status === 'Perishable');
+    } else if (filterBy === 'Non-Perishable') {
+      tempItems = tempItems.filter(item => item.status === 'Non-Perishable');
+    }
+
+    // Sort items
+    switch (sortBy) {
+      case 'Name':
+        return tempItems.sort((a, b) => a.name.localeCompare(b.name));
+      case 'Quantity':
+        return tempItems.sort((a, b) => a.quantity - b.quantity);
+      default:
+        return tempItems;
+    }
+  }, [items, activeSubPage, sortBy, filterBy]);
 
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
-  const [sortBy, setSortBy] = useState('Name');
-
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
 
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const handleToggleDropdown = (isOpen) => {
-    console.log("Dropdown state before:", dropdownOpen);
-    setDropdownOpen(isOpen);
-    console.log("Dropdown state after:", dropdownOpen);
-  };
-
-
   const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+    setCurrentPage(prev => Math.max(prev - 1, 1));
   };
 
   const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
+    setCurrentPage(prev => Math.min(prev + 1, totalPages));
   };
 
   return (
@@ -64,20 +69,25 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
                <button className="sidebar-button"></button>
           </div> 
        </div>
-      <div className="inventory-content"> 
+       <div className="inventory-content">
         <div className="header">
-        <h2 className="title">
+          <h2 className="title">
             Sort By:
-            <Dropdown show={dropdownOpen} onToggle={handleToggleDropdown}>
+            <Dropdown isOpen={dropdownOpen} toggle={() => setDropdownOpen(!dropdownOpen)}>
               <Dropdown.Toggle variant="secondary" id="dropdown-basic">
                 {sortBy}
                 <FontAwesomeIcon icon={faAngleDown} style={{ marginLeft: '5px' }} />
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => { setSortBy('Name'); setDropdownOpen(false); }}>Name</Dropdown.Item>
-                <Dropdown.Item onClick={() => { setSortBy('Quantity'); setDropdownOpen(false); }}>Quantity</Dropdown.Item>
+                <Dropdown.Item onClick={() => setSortBy('Name')}>Name</Dropdown.Item>
+                <Dropdown.Item onClick={() => setSortBy('Quantity')}>Quantity</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
+            <div className="filter-buttons">
+              <button onClick={() => setFilterBy('All')} className={filterBy === 'All' ? 'active' : ''}>All</button>
+              <button onClick={() => setFilterBy('Perishable')} className={filterBy === 'Perishable' ? 'active' : ''}>Perishable</button>
+              <button onClick={() => setFilterBy('Non-Perishable')} className={filterBy === 'Non-Perishable' ? 'active' : ''}>Non-Perishable</button>
+            </div>
             <button className="add-button" onClick={onShowAddItem}>ADD</button>
           </h2>
         </div>
