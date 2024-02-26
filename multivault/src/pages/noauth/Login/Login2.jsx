@@ -60,7 +60,7 @@ export default function Login() {
                 break;
         */
             default: 
-                navigate('/homepage');
+                navigate('/inventory');
                 break;
         }
     }

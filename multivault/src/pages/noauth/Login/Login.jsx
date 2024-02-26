@@ -5,13 +5,18 @@ import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../../../firebase/firebase';
 
-export default function Login() {
+export default function Login({user}) {
     const navigate = useNavigate();
     const [activeButton, setActiveButton] = useState('User');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+
+	// Check if user exists
+    if (user) {
+        navigate('/inventory');
+    }
 
     const handleButtonClick = (button) => {
       	setActiveButton(button);
@@ -52,7 +57,7 @@ export default function Login() {
                 break;
         */
             default: 
-                navigate('/homepage');
+                navigate('/inventory');
                 break;
         }
     }
