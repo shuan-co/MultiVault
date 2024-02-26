@@ -116,7 +116,7 @@ const Inventory = ({ items, onShowAddItem, onShowEditItem, activeSubPage, sortIt
 										/>
 										<button className="item-edit-button" onClick={() => {setItemToEdit(item); onShowEditItem();}}></button>
                   </div>
-                  <img src={item.image} alt={item.name || "Default placeholder"}/>
+                  <img src={item.imageurl} alt={item.name || "Default placeholder"}/>
                   <div className="item-name">
                   <span className="item-value-name">{item.name}</span>
                     </div>
