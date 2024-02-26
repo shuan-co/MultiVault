@@ -5,32 +5,27 @@ import './InventorySide.css';
 import { Pagination, Dropdown } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import EditItem from './EditItem.jsx';
 
-const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
+const Inventory = ({ items, onShowAddItem, onShowEditItem, activeSubPage, sortItemsByMinQuantity, sortItemsByMaxQuantity, sortItemsAsc, sortItemsDesc, sortExpAsc, sortExpDesc, setItemToEdit, onToggleSelectItem, selectedItems }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
   const [sortBy, setSortBy] = useState('Name');
-  const [filterBy, setFilterBy] = useState('All'); // Added state for filtering
-
-  // Adding dropdownOpen state for the Dropdown toggle functionality
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [filterBy, setFilterBy] = useState('All');
 
   const filteredItems = useMemo(() => {
     let tempItems = items;
 
-    // Filter by activeSubPage
     if (activeSubPage === 'low-stock') {
       tempItems = items.filter(item => item.quantity <= 50);
     }
 
-    // Filter by perishable status
     if (filterBy === 'Perishable') {
       tempItems = tempItems.filter(item => item.status === 'Perishable');
     } else if (filterBy === 'Non-Perishable') {
       tempItems = tempItems.filter(item => item.status === 'Non-Perishable');
     }
 
-    // Sort items
     switch (sortBy) {
       case 'Name':
         return tempItems.sort((a, b) => a.name.localeCompare(b.name));
@@ -41,17 +36,31 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
     }
   }, [items, activeSubPage, sortBy, filterBy]);
 
+
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
 
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleToggleDropdown = (isOpen) => {
+    console.log("Dropdown state before:", dropdownOpen);
+    setDropdownOpen(isOpen);
+    console.log("Dropdown state after:", dropdownOpen);
+  };
+
   const handlePrevPage = () => {
-    setCurrentPage(prev => Math.max(prev - 1, 1));
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   const handleNextPage = () => {
-    setCurrentPage(prev => Math.min(prev + 1, totalPages));
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   return (
@@ -73,14 +82,18 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
         <div className="header">
           <h2 className="title">
             Sort By:
-            <Dropdown isOpen={dropdownOpen} toggle={() => setDropdownOpen(!dropdownOpen)}>
+            <Dropdown show={dropdownOpen} onToggle={handleToggleDropdown}>
               <Dropdown.Toggle variant="secondary" id="dropdown-basic">
                 {sortBy}
                 <FontAwesomeIcon icon={faAngleDown} style={{ marginLeft: '5px' }} />
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => setSortBy('Name')}>Name</Dropdown.Item>
-                <Dropdown.Item onClick={() => setSortBy('Quantity')}>Quantity</Dropdown.Item>
+                <Dropdown.Item onClick={() => { setSortBy('A-Z'); setDropdownOpen(false); sortItemsAsc()}}>A-Z</Dropdown.Item>
+                <Dropdown.Item onClick={() => { setSortBy('Z-A'); setDropdownOpen(false); sortItemsDesc()}}>Z-A</Dropdown.Item>
+                <Dropdown.Item onClick={() => { setSortBy('Quantity Ascending'); setDropdownOpen(false); sortItemsByMinQuantity()}}>Quantity Ascending</Dropdown.Item>
+                <Dropdown.Item onClick={() => { setSortBy('Quantity Descending'); setDropdownOpen(false); sortItemsByMaxQuantity()}}>Quantity Descending</Dropdown.Item>
+                <Dropdown.Item onClick={() => { setSortBy('Expiration Date Ascending'); setDropdownOpen(false); sortExpAsc()}}>Expiration Ascending</Dropdown.Item>
+                <Dropdown.Item onClick={() => { setSortBy('Expiration Date Descending'); setDropdownOpen(false); sortExpDesc()}}>Expiration Descending</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
             <div className="filter-buttons">
@@ -95,7 +108,15 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
           {currentItems.length > 0 ? (
              currentItems.map((item, index) => (
                 <div key={index} className="item">
-                  <img src={item.image || "https://lh3.googleusercontent.com/proxy/ua8hNK96q9w_uMC3uKo2sYYPj0tyDTEKnm-LFkBt78dRYVdTRMI22L-KlAm2wTQW2MQSLVfLCdTtXdqkC2n7RJc9N9JDQoZM7hYlCCXusXho1gTfnjZiZQk3UHMQjZRJ"} alt={item.name || "Default placeholder"} />
+                  <div className = "item-header">
+                  <input
+											class="item-select-checkbox"
+											type="checkbox"
+											onChange={() => onToggleSelectItem(item.index)}
+										/>
+										<button className="item-edit-button" onClick={() => {setItemToEdit(item); onShowEditItem();}}></button>
+                  </div>
+                  <img src={item.image} alt={item.name || "Default placeholder"}/>
                   <div className="item-name">
                   <span className="item-value-name">{item.name}</span>
                     </div>
