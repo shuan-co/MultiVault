@@ -30,7 +30,7 @@ const AddItem = ({ onAdd, show, onHide }) => {
         .then((url) => {
             // Data with image URL
             if (!itemName.trim() || !itemDescription.trim() || !itemQuantity.trim()) return;
-            onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantity: itemQuantity, imageurl: url, expiry: itemExpiry });
+            onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantity: itemQuantity, imageurl: url, expiry: itemExpiry, index: itemIndex });
             setItemName('');
             setItemDescription('');
             setItemQuantity('');
@@ -51,13 +51,14 @@ const AddItem = ({ onAdd, show, onHide }) => {
     else {
       // Data without image URL
       if (!itemName.trim() || !itemDescription.trim() || !itemQuantity.trim()) return;
-      onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantity: itemQuantity, imageurl: '', expiry: itemExpiry });
+      onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantity: itemQuantity, imageurl: '', expiry: itemExpiry, index: itemIndex });
       setItemName('');
       setItemDescription('');
       setItemQuantity('');
       setItemStatus('');
       setItemImage(null);
       setItemExpiry(currDate);
+      setItemIndex(itemIndex+1);
       onHide();
     }
   };

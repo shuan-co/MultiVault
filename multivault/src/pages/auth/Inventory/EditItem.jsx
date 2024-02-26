@@ -3,12 +3,19 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
 import './AddItem.css';
 
+import { auth, storage } from '../../../firebase/firebase';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {v4} from 'uuid';
+
 const EditItem = ({ onEdit, show, onHide, item }) => {
+    const currDate = new Date().toISOString().split('T')[0]
     const [itemName, setItemName] = useState('');
     const [itemDescription, setItemDescription] = useState('');
     const [itemQuantity, setItemQuantity] = useState('');
     const [itemStatus, setItemStatus] = useState('');
     const [itemIndex, setItemIndex] = useState(null);
+    const [itemExpiry, setItemExpiry] = useState(currDate);
+    const [itemImage, setItemImage] = useState(null);
 
     useEffect(() => {
         // Initialize state with item values when the component mounts
@@ -17,26 +24,63 @@ const EditItem = ({ onEdit, show, onHide, item }) => {
             setItemDescription(item.description);
             setItemQuantity(item.quantity);
             setItemStatus(item.status);
+            setItemExpiry(item.expiry);
+            setItemImage(item.imageurl);
             setItemIndex(item.index);
         }
     }, [item]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         if (!itemName.trim() || !itemDescription.trim() || !itemQuantity.trim()) return;
-        const updatedItem = {
-            ...item,
-            name: itemName,
-            description: itemDescription,
-            quantity: itemQuantity,
-            status: itemStatus,
-            index: itemIndex
-        };
-        console.log( itemIndex );
-        
-        onEdit(updatedItem);
-        onHide();
-    };
+
+        // - Upload image
+        if (itemImage != null) {
+            const imageRef = ref(storage,  `${auth.currentUser?.uid}/${itemImage.name + v4()}`);
+
+            uploadBytes( imageRef, itemImage )
+            .then(() => {
+                getDownloadURL(imageRef)
+                .then((url) => {
+
+                    const updatedItem = {
+                        ...item,
+                        name: itemName,
+                        description: itemDescription,
+                        quantity: itemQuantity,
+                        status: itemStatus,
+                        expiry : itemExpiry, 
+                        index: itemIndex,
+                        imageurl: url
+                    };
+
+                    onEdit(updatedItem);
+                    onHide();
+                })
+            });
+        } else {
+            // - Data without image URL
+            const updatedItem = {
+                ...item,
+                name: itemName,
+                description: itemDescription,
+                quantity: itemQuantity,
+                status: itemStatus,
+                expiry : itemExpiry, 
+                index: itemIndex,
+                imageurl: ''
+            };
+
+            onEdit(updatedItem);
+            onHide();
+        }
+    }
+
+    const handleImageChange = (e) => {
+        setItemImage(e.target.files[0]);
+      };
+    
     return (
         <Modal show={show} onHide={onHide} centered>
             <Modal.Header closeButton>
@@ -56,9 +100,21 @@ const EditItem = ({ onEdit, show, onHide, item }) => {
                         type="number" placeholder="Enter item quantity" value={itemQuantity}
                         onChange={(e) => setItemQuantity(e.target.value)}
                     />
+                    <select value={itemStatus} onChange={(e) => setItemStatus(e.target.value)}>
+                        <option value="">Select Status</option>
+                        <option value="Perishable">Perishable</option>
+                        <option value="Non-Perishable">Non-Perishable</option>
+                    </select>
                     <input
-                        type="text" placeholder="Enter item status" value={itemStatus}
-                        onChange={(e) => setItemStatus(e.target.value)}
+                        type="date"
+                        placeholder="Expiry Date"
+                        value={itemExpiry}
+                        onChange={(e) => setItemExpiry(e.target.value)}
+                    />
+                    <input
+                        type="file"
+                        onChange={handleImageChange}
+                        accept="image/*"
                     />
                     <button type="submit">Submit</button>
                 </form>

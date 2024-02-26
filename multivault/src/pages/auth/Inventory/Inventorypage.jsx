@@ -5,7 +5,7 @@ import AddItem from './AddItem';
 import EditItem from './EditItem';
 
 import { auth, db } from '../../../firebase/firebase';
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { collection, addDoc, getDocs, updateDoc, query, where } from "firebase/firestore";
 
 function Inventorypage() {
   const [items, setItems] = useState([]);
@@ -49,13 +49,44 @@ function Inventorypage() {
     retrieveItems();
   };
 
-  const handleEditItem = (updatedItem) => {
-    const index = items.findIndex(item => item.index === updatedItem.index);
-    if (index !== -1) {
-        const updatedItems = [...items];
-        updatedItems[index] = updatedItem;  
-        setItems(updatedItems);
-    }    
+  const handleEditItem = async (updatedItem) => {
+    console.log("updatedItem:", updatedItem); // Check the value of updatedItem
+
+    const index = updatedItem.index;
+
+    const querySnapshot = await getDocs(query( 
+        itemsCollectionRef,
+        where('index', '==', index )
+    ));
+
+    const docs = querySnapshot.docs;
+    console.log( docs );
+    if (docs.length === 0) {
+      console.log('No matching document.');
+      return null;
+    }
+
+    // - Assuming there's only one document matching the index
+    const doc = docs[0];
+    const itemId = doc.id;
+
+    console.log("doc:", doc); // Check the value of docs
+    console.log("documentID", itemId); // Check the value of docs
+
+    try {
+      // Update the document with the new data
+      updateDoc(doc.ref, updatedItem).then(() => {
+        alert('Item Updated Successfully');
+      }).catch((err) => {
+        alert('Error Updating Item');
+        console.error(err);
+      })
+      retrieveItems(); // Refresh the items list after updating
+    } catch (error) {
+      console.error('Error updating item:', error);
+      alert('Error updating item');
+    }
+
     setShowEditItem(false); // Close the modal after item is added
   };
 
