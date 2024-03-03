@@ -29,7 +29,7 @@ describe('Registration Flow', () => {
     });
 
     it('Registers a Business Account', () => {
-        cy.visit('http://localhost:3000/'); // Adjust the URL to match your application's starting point
+        cy.visit('http://localhost:3000/'); 
 
         // Select the Business account type
         cy.contains('Create an account').click();
