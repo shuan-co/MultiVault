@@ -243,13 +243,15 @@ export default function Register({ user }) {
                                 <div className='col-span-4'>
                                     <h3>Admin First Name</h3>
                                     <input type='text' placeholder='Enter your First Name' className='text-black block w-full rounded-md italic border-0 p-3'
-                                        name='firstName' value={form.firstName} onChange={handleChange} required />
+                                        name='firstName' value={form.firstName} onChange={handleChange}
+                                        data-testid="firstName" required />
                                 </div>
 
                                 <div className='col-span-4'>
                                     <h3>Company Name </h3>
                                     <input type='text' placeholder='Enter Company Name' className='text-black block w-full rounded-md italic border-0 p-3'
-                                        name='companyName' value={form.companyName} onChange={handleChange} required />
+                                        name='companyName' value={form.companyName} onChange={handleChange}
+                                        data-testid="companyName" required />
                                 </div>
                             </div>
 
@@ -257,13 +259,15 @@ export default function Register({ user }) {
                                 <div className='col-span-4'>
                                     <h3>Admin Last Name</h3>
                                     <input type='text' placeholder='Enter your Last Name' className='text-black block w-full rounded-md italic border-0 p-3'
-                                        name='lastName' value={form.lastName} onChange={handleChange} required />
+                                        name='lastName' value={form.lastName} onChange={handleChange}
+                                        data-testid="lastName" required />
                                 </div>
 
                                 <div className='col-span-4'>
                                     <h3>Business Type</h3>
                                     <input type='text' placeholder='Enter Business Type' className='text-black block w-full rounded-md italic border-0 p-3'
-                                        name='businessType' value={form.businessType} onChange={handleChange} required />
+                                        name='businessType' value={form.businessType} onChange={handleChange}
+                                        data-testid="businessType" required />
                                 </div>
                             </div>
 
@@ -279,6 +283,7 @@ export default function Register({ user }) {
                                                 className="text-black block w-full rounded-md border-0 p-3"
                                                 defaultValue='Male'
                                                 onChange={handleChange}
+                                                data-testid="sex"
                                                 required
                                             >
                                                 <option value="Male">Male</option>
@@ -289,7 +294,8 @@ export default function Register({ user }) {
                                         <div className='sm:col-span-4'>
                                             <h3>Birthday</h3>
                                             <input type='date' className='text-black block w-full rounded-md italic border-0 p-3'
-                                                name='birthday' value={form.birthday} onChange={handleChange} required />
+                                                name='birthday' value={form.birthday} onChange={handleChange}
+                                                data-testid="birthday" required />
                                         </div>
 
                                     </div>
@@ -297,20 +303,22 @@ export default function Register({ user }) {
                                     <div>
                                         <h3>Email Address</h3>
                                         <input type='email' placeholder='Enter your email address' className='text-black block w-full rounded-md italic border-0 p-3'
-                                            name='email' value={form.email} onChange={handleChange} required />
+                                            name='email' value={form.email} onChange={handleChange}
+                                            data-testid="email" required />
                                     </div>
 
                                     <div>
                                         <h3>Password</h3>
                                         <input type='password' placeholder='Enter your password' className='text-black block w-full rounded-md italic border-0 p-3'
-                                            name='password' value={form.password} onChange={handleChange} required />
+                                            name='password' value={form.password} onChange={handleChange}
+                                            data-testid="password" required />
                                     </div>
                                 </div>
 
                                 <div className='col-span-4 flex flex-col'>
                                     <h3>Business Description</h3>
                                     <textarea placeholder='Text' className='text-black block w-full h-full rounded-md italic border-0 p-3'
-                                        name='businessDesc' value={form.businessDesc} onChange={handleChange} required />
+                                        name='businessDesc' data-testid="businessDesc" value={form.businessDesc} onChange={handleChange} required />
                                 </div>
                             </div>
                         </div>

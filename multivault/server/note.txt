@@ -1,3 +1,0 @@
-Just created everything in the server folder in case 
-    "/src/pages/noauth/Login/Login2.jsx"
-is what we needed
