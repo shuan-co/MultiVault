@@ -5,17 +5,22 @@ import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../../../firebase/firebase';
 
-export default function Login() {
-	const navigate = useNavigate();
-	const [activeButton, setActiveButton] = useState('User');
+export default function Login({user}) {
+    const navigate = useNavigate();
+    const [activeButton, setActiveButton] = useState('User');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 
-	const handleButtonClick = (button) => {
-		setActiveButton(button);
-	};
+	// Check if user exists
+    if (user) {
+        navigate('/inventory');
+    }
+
+    const handleButtonClick = (button) => {
+      	setActiveButton(button);
+    };
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
@@ -37,25 +42,25 @@ export default function Login() {
 		}
 	}
 
-	const handleRedirect = (accountType) => {
-		switch (accountType) {
-			/*
-				case 'restaurantManager':
-				case 'stockManager':
-					navigate('/inventory');
-					break;
-				case 'financeManager':
-					navigate('/dashboard');
-					break;
-				case 'kitchenStaff':
-					navigate('/expiration'); // Not sure where to redirect staff members
-					break;
-			*/
-			default:
-				navigate('/homepage');
-				break;
-		}
-	}
+    const handleRedirect = ( accountType ) => {
+		switch( accountType ) {
+        /*
+            case 'restaurantManager':
+            case 'stockManager':
+                navigate('/inventory');
+                break;
+            case 'financeManager':
+                navigate('/dashboard');
+                break;
+            case 'kitchenStaff':
+                navigate('/expiration'); // Not sure where to redirect staff members
+                break;
+        */
+            default: 
+                navigate('/inventory');
+                break;
+        }
+    }
 
 	return (
 		<div style={{ backgroundImage: `url(${loginBg})` }} className='flex items-center justify-center h-screen'>

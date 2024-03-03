@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { auth, db } from '../../../firebase/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { collection, addDoc } from "firebase/firestore";
+import { collection, doc, setDoc } from "firebase/firestore";
 
 export default function Register({ user }) {
 
@@ -14,7 +14,7 @@ export default function Register({ user }) {
 
     // Check if user exists
     if (user) {
-        navigate('/private');
+        navigate('/inventory');
     }
     // Registration Form
     const [form, setForm] = useState({
@@ -63,8 +63,8 @@ export default function Register({ user }) {
         createUserWithEmailAndPassword(auth, form.email, form.password)
             .then((credentials) => {
                 // console.log("Current USer:", auth.currentUser?.email);
-                addDoc(usersCollectionRef, {
-                    uid: credentials.user.uid,
+                const userDocRef = doc(usersCollectionRef, `${credentials.user.uid}`)
+                setDoc(userDocRef, {
                     firstName: form.firstName,
                     lastName: form.lastName,
                     sex: form.sex,

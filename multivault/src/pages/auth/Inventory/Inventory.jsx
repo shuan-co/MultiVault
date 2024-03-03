@@ -1,28 +1,43 @@
 import React, { useState, useMemo } from 'react';
-import './Inventory.css'
-import './InventoryHead.css'
-import './InventorySide.css'
-import { Pagination, Dropdown, Form } from 'react-bootstrap';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
+import './Inventory.css';
+import './InventoryHead.css';
+import './InventorySide.css';
+import { Pagination, Dropdown } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight, faAngleDown} from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faAngleRight, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import EditItem from './EditItem.jsx';
 
-const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
-  const filteredItems = useMemo(() => {
-    if (activeSubPage === 'all') {
-      return items;
-    } else if (activeSubPage === 'low-stock') {
-      return items.filter((item) => item.quantity <= 50)
-    } else {
-      return items;
-    }
-  }, [items, activeSubPage]);
-
+const Inventory = ({ items, onShowAddItem, onShowEditItem, activeSubPage, sortItemsByMinQuantity, sortItemsByMaxQuantity, sortItemsAsc, sortItemsDesc, sortExpAsc, sortExpDesc, setItemToEdit, onToggleSelectItem, selectedItems }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
+  const [sortBy, setSortBy] = useState('Name');
+  const [filterBy, setFilterBy] = useState('All');
+
+  const filteredItems = useMemo(() => {
+    let tempItems = items;
+
+    if (activeSubPage === 'low-stock') {
+      tempItems = items.filter(item => item.quantity <= 50);
+    }
+
+    if (filterBy === 'Perishable') {
+      tempItems = tempItems.filter(item => item.status === 'Perishable');
+    } else if (filterBy === 'Non-Perishable') {
+      tempItems = tempItems.filter(item => item.status === 'Non-Perishable');
+    }
+
+    switch (sortBy) {
+      case 'Name':
+        return tempItems.sort((a, b) => a.name.localeCompare(b.name));
+      case 'Quantity':
+        return tempItems.sort((a, b) => a.quantity - b.quantity);
+      default:
+        return tempItems;
+    }
+  }, [items, activeSubPage, sortBy, filterBy]);
+
 
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
-  const [sortBy, setSortBy] = useState('Name');
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -35,7 +50,6 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
     setDropdownOpen(isOpen);
     console.log("Dropdown state after:", dropdownOpen);
   };
-
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
@@ -64,9 +78,9 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
                <button className="sidebar-button"></button>
           </div> 
        </div>
-      <div className="inventory-content"> 
+       <div className="inventory-content">
         <div className="header">
-        <h2 className="title">
+          <h2 className="title">
             Sort By:
             <Dropdown show={dropdownOpen} onToggle={handleToggleDropdown}>
               <Dropdown.Toggle variant="secondary" id="dropdown-basic">
@@ -74,10 +88,19 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
                 <FontAwesomeIcon icon={faAngleDown} style={{ marginLeft: '5px' }} />
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => { setSortBy('Name'); setDropdownOpen(false); }}>Name</Dropdown.Item>
-                <Dropdown.Item onClick={() => { setSortBy('Quantity'); setDropdownOpen(false); }}>Quantity</Dropdown.Item>
+                <Dropdown.Item onClick={() => { setSortBy('A-Z'); setDropdownOpen(false); sortItemsAsc()}}>A-Z</Dropdown.Item>
+                <Dropdown.Item onClick={() => { setSortBy('Z-A'); setDropdownOpen(false); sortItemsDesc()}}>Z-A</Dropdown.Item>
+                <Dropdown.Item onClick={() => { setSortBy('Quantity Ascending'); setDropdownOpen(false); sortItemsByMinQuantity()}}>Quantity Ascending</Dropdown.Item>
+                <Dropdown.Item onClick={() => { setSortBy('Quantity Descending'); setDropdownOpen(false); sortItemsByMaxQuantity()}}>Quantity Descending</Dropdown.Item>
+                <Dropdown.Item onClick={() => { setSortBy('Expiration Date Ascending'); setDropdownOpen(false); sortExpAsc()}}>Expiration Ascending</Dropdown.Item>
+                <Dropdown.Item onClick={() => { setSortBy('Expiration Date Descending'); setDropdownOpen(false); sortExpDesc()}}>Expiration Descending</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
+            <div className="filter-buttons">
+              <button onClick={() => setFilterBy('All')} className={filterBy === 'All' ? 'active' : ''}>All</button>
+              <button onClick={() => setFilterBy('Perishable')} className={filterBy === 'Perishable' ? 'active' : ''}>Perishable</button>
+              <button onClick={() => setFilterBy('Non-Perishable')} className={filterBy === 'Non-Perishable' ? 'active' : ''}>Non-Perishable</button>
+            </div>
             <button className="add-button" onClick={onShowAddItem}>ADD</button>
           </h2>
         </div>
@@ -85,7 +108,15 @@ const Inventory = ({ items, onShowAddItem, activeSubPage }) => {
           {currentItems.length > 0 ? (
              currentItems.map((item, index) => (
                 <div key={index} className="item">
-                  <img src={item.image || "https://lh3.googleusercontent.com/proxy/ua8hNK96q9w_uMC3uKo2sYYPj0tyDTEKnm-LFkBt78dRYVdTRMI22L-KlAm2wTQW2MQSLVfLCdTtXdqkC2n7RJc9N9JDQoZM7hYlCCXusXho1gTfnjZiZQk3UHMQjZRJ"} alt={item.name || "Default placeholder"} />
+                  <div className = "item-header">
+                  <input
+											class="item-select-checkbox"
+											type="checkbox"
+											onChange={() => onToggleSelectItem(item.index)}
+										/>
+										<button className="item-edit-button" onClick={() => {setItemToEdit(item); onShowEditItem();}}></button>
+                  </div>
+                  <img src={item.imageurl} alt={item.name || "Default placeholder"}/>
                   <div className="item-name">
                   <span className="item-value-name">{item.name}</span>
                     </div>

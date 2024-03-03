@@ -109,12 +109,6 @@ body, html {
 }
 
 
-@media (max-width: 768px) {
-  .item-details {
-  }
-}
-
-
 @media (max-width: 1024px) {
   .inventory {
     grid-template-columns: repeat(2, 1fr); 
@@ -125,4 +119,25 @@ body, html {
   .inventory {
     grid-template-columns: repeat(1, 1fr); 
   }
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.item-select-checkbox {
+  align-self: flex-start;
+  width: 20px; 
+  height: 20px; 
+}
+
+.item-edit-button {
+  align-self: flex-end;
+  background-image: url('editButton.png');
+  background-size: contain; 
+  background-repeat: no-repeat; 
+  width: 20px; 
+  height: 20px; 
 }

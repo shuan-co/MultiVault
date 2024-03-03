@@ -3,28 +3,70 @@ import React, { useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import './AddItem.css';
 
+import { auth, storage } from '../../../firebase/firebase';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {v4} from 'uuid';
+
 const AddItem = ({ onAdd, show, onHide }) => {
+  const currDate = new Date().toISOString().split('T')[0]
   const [itemName, setItemName] = useState('');
   const [itemDescription, setItemDescription] = useState('');
   const [itemQuantity, setItemQuantity] = useState('');
   const [itemStatus, setItemStatus] = useState('');
+  const [itemExpiry, setItemExpiry] = useState(currDate);
   const [itemImage, setItemImage] = useState(null);
+  const [itemIndex, setItemIndex] = useState(0);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!itemName.trim() || !itemDescription.trim() || !itemQuantity.trim()) return;
-    onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantity: itemQuantity, image: itemImage });
-    setItemName('');
-    setItemDescription('');
-    setItemQuantity('');
-    setItemStatus('');
-    setItemImage(null);
-    onHide();
+    // Upload image
+    if (itemImage != null) {
+      const imageRef = ref(storage,  `${auth.currentUser?.uid}/${itemImage.name + v4()}`);
+
+      uploadBytes(imageRef, itemImage)
+      .then(() => {
+        // Get Image URL for rendering
+        getDownloadURL(imageRef)
+        .then((url) => {
+            // Data with image URL
+            if (!itemName.trim() || !itemDescription.trim() || !itemQuantity.trim()) return;
+            onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantity: itemQuantity, imageurl: url, expiry: itemExpiry, index: itemIndex });
+            setItemName('');
+            setItemDescription('');
+            setItemQuantity('');
+            setItemStatus('');
+            setItemImage(null);
+            setItemExpiry(currDate);
+            setItemIndex(itemIndex+1);
+            onHide();
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+    }
+    else {
+      // Data without image URL
+      if (!itemName.trim() || !itemDescription.trim() || !itemQuantity.trim()) return;
+      onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantity: itemQuantity, imageurl: '', expiry: itemExpiry, index: itemIndex });
+      setItemName('');
+      setItemDescription('');
+      setItemQuantity('');
+      setItemStatus('');
+      setItemImage(null);
+      setItemExpiry(currDate);
+      setItemIndex(itemIndex+1);
+      onHide();
+    }
   };
 
   const handleImageChange = (e) => {
     setItemImage(e.target.files[0]);
   };
+
 
   return (
     <>
@@ -52,15 +94,21 @@ const AddItem = ({ onAdd, show, onHide }) => {
               value={itemQuantity}
               onChange={(e) => setItemQuantity(e.target.value)}
             />
+            <select value={itemStatus} onChange={(e) => setItemStatus(e.target.value)}>
+              <option value="">Select Status</option>
+              <option value="Perishable">Perishable</option>
+              <option value="Non-Perishable">Non-Perishable</option>
+            </select>
             <input
-              type="text"
-              placeholder="Enter item status"
-              value={itemStatus}
-              onChange={(e) => setItemStatus(e.target.value)}
+              type="date"
+              placeholder="Expiry Date"
+              value={itemExpiry}
+              onChange={(e) => setItemExpiry(e.target.value)}
             />
             <input
               type="file"
               onChange={handleImageChange}
+              accept="image/*"
             />
             <button type="submit">Submit</button>
           </form>
