@@ -3,7 +3,7 @@ import Register from '../pages/noauth/Register/Register';
 import { MemoryRouter } from 'react-router-dom';
 import React from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { addDoc } from 'firebase/firestore';
+import { setDoc } from 'firebase/firestore';
 
 // Mocking Firebase functions
 jest.mock('firebase/auth', () => ({
@@ -13,7 +13,7 @@ jest.mock('firebase/auth', () => ({
 
 jest.mock('firebase/firestore', () => ({
     ...jest.requireActual('firebase/firestore'),
-    addDoc: jest.fn(),
+    setDoc: jest.fn(),
 }));
 
 window.alert = jest.fn();
@@ -58,7 +58,7 @@ testCases.forEach((testCase, index) => {
     test(`User Account can register successfully - Test Case ${index + 1}`, async () => {
         window.alert.mockClear();
         createUserWithEmailAndPassword.mockResolvedValueOnce({ user: { uid: `mockUid${index}` } });
-        addDoc.mockResolvedValueOnce();
+        setDoc.mockResolvedValueOnce();
 
         const { getByLabelText, getByText, getByTestId } = render(
             <MemoryRouter>
@@ -82,18 +82,17 @@ testCases.forEach((testCase, index) => {
                 testCase.password
             );
 
-            expect(addDoc).toHaveBeenCalledWith(
+            expect(setDoc).toHaveBeenCalledWith(
                 expect.any(Object),
                 expect.objectContaining({
-                    accountType: 'User',
-                    birthday: testCase.birthday,
-                    businessDesc: '',
-                    businessType: '',
-                    companyName: '',
                     firstName: testCase.firstName,
                     lastName: testCase.lastName,
                     sex: testCase.sex,
-                    uid: `mockUid${index}`,
+                    birthday: testCase.birthday,
+                    companyName: "",
+                    businessType: "",
+                    businessDesc: "",
+                    accountType: 'User',
                 })
             );
         });
@@ -152,7 +151,7 @@ businessTestCases.forEach((testCase, index) => {
     test(`Business Account can register successfully - Test Case ${index + 1}`, async () => {
         window.alert.mockClear();
         createUserWithEmailAndPassword.mockResolvedValueOnce({ user: { uid: `mockUid${index}` } });
-        addDoc.mockResolvedValueOnce();
+        setDoc.mockResolvedValueOnce();
 
         const { getByLabelText, getByText, getByTestId } = render(
             <MemoryRouter>
@@ -185,18 +184,17 @@ businessTestCases.forEach((testCase, index) => {
                 testCase.password
             );
 
-            expect(addDoc).toHaveBeenCalledWith(
+            expect(setDoc).toHaveBeenCalledWith(
                 expect.any(Object),
                 expect.objectContaining({
-                    accountType: 'Business',
+                    firstName: testCase.firstName,
+                    lastName: testCase.lastName,
+                    sex: testCase.sex,
                     birthday: testCase.birthday,
                     companyName: testCase.companyName,
                     businessType: testCase.businessType,
                     businessDesc: testCase.businessDesc,
-                    firstName: testCase.firstName,
-                    lastName: testCase.lastName,
-                    sex: testCase.sex,
-                    uid: `mockUid${index}`,
+                    accountType: 'Business',
                 })
             );
         });
