@@ -33,9 +33,32 @@ jobs:
         working-directory: ./multivault
         run: npm test
 
-  enforce-tests-on-main:
+  cypress-tests:
     runs-on: ubuntu-latest
     needs: test
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Install Dependencies
+        working-directory: ./multivault
+        run: |
+          npm install
+          npm install --save-dev cypress
+
+      - name: Run Cypress Tests
+        working-directory: ./multivault
+        run: npx cypress run
+
+  enforce-tests-on-main:
+    runs-on: ubuntu-latest
+    needs: [test, cypress-tests]  # Add cypress-tests as a dependency
 
     steps:
       - name: Checkout Repository
