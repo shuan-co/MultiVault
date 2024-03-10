@@ -8,6 +8,7 @@ import { auth, db } from '../../../firebase/firebase';
 import { collection, addDoc, getDocs, updateDoc, query, where } from "firebase/firestore";
 
 function Inventorypage() {
+  const currDate = new Date()
   const [items, setItems] = useState([]);
   const [showAddItem, setShowAddItem] = useState(false);
   const [showEditItem, setShowEditItem] = useState(false);
@@ -77,6 +78,15 @@ function Inventorypage() {
       // Update the document with the new data
       updateDoc(doc.ref, updatedItem).then(() => {
         alert('Item Updated Successfully');
+
+        const expiryDate = new Date(updatedItem.expiry);
+        // Calculate the difference between the two dates in milliseconds
+        const differenceMs = expiryDate - currDate;
+        // Convert milliseconds to days
+        const differenceDays = differenceMs / (1000 * 60 * 60 * 24);
+        if (differenceDays <= 2) {
+          // EMAIL HERE
+        }
       }).catch((err) => {
         alert('Error Updating Item');
         console.error(err);
