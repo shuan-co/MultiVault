@@ -4,3 +4,7 @@
     font-family: 'Exo', sans-serif;
     font-family: 'Inter', sans-serif;
 }
+
+.low-stock {
+    background-color: red;
+}
