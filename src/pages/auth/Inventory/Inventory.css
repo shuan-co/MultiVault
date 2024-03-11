@@ -3,6 +3,7 @@ body, html {
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
+  user-select: none;
 }
 
 /* Main container */
@@ -15,6 +16,9 @@ body, html {
   height: 100vh;
   box-sizing: border-box; 
   overflow: hidden; 
+}
+
+.profile {
 }
 
 /* Inventory content */

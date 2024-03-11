@@ -1,0 +1,123 @@
+.profile-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    z-index: 9999;
+}
+  
+.profile-modal-container {
+    background-color: #eeebeb;
+    margin: 20px;
+    border-radius: 8px;
+    min-width: 500px;
+    position: relative;
+    color: black;
+}
+
+/********************************************
+                Modal Header
+********************************************/
+.profile-modal-header {
+    border-radius: 8px 8px 0 0;
+    background-color: #396079;
+    min-height: 60px;
+}
+
+.profile-modal-header-title {
+    position: absolute;
+    top: 5px;
+    left: 30px;
+    background: none;
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+}
+  
+.profile-modal-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #5e6977;
+    min-width: 25px;
+    min-height: 25px;
+    border-radius: 50px;
+    margin: 5px;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/********************************************
+               Content Container
+********************************************/
+.profile-modal-content-container {
+    margin: 10px;
+    padding: 10px;
+}
+
+.profile-modal-text-view {
+    display: flex;
+    padding: 0px 10px 0px 10px;
+    margin-bottom: 10px;
+    background-color: #eeebeb;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.profile-modal-input-label {
+    font-weight: bold;
+}
+
+.profile-modal-input-display {
+    margin-left: 5px;
+}
+
+.profile-modal-input-content {
+    margin-left: 5px;
+    padding: 5px;
+    border: 8px;
+    width: 70%;
+}
+
+/********************************************
+               Buttons Container
+********************************************/
+.profile-modal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+  
+.profile-modal-actions button {
+    margin-left: 10px;
+}
+  
+.profile-edit-button {
+    padding: 5px 25px 5px 25px;
+    background-color: #5e6977;
+    color: white;
+    border-radius: 8px;
+}
+
+.profile-save-button {
+    padding: 5px 25px 5px 25px;
+    background-color: #ee9a09;
+    color: white;
+    border-radius: 8px;
+}
+
+.profile-delete-button {
+    padding: 5px 25px 5px 25px;
+    border-radius: 8px;
+    color: red;
+    background-color: transparent;
+    border: 2px solid red;
+}
