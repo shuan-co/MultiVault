@@ -5,10 +5,12 @@ on:
     branches:
       - main
       - releases
+      - e2e 
   pull_request:
     branches:
       - main
       - releases
+      - e2e  
 
 jobs:
   test:
@@ -33,7 +35,7 @@ jobs:
         working-directory: ./multivault
         run: npm test
 
-  enforce-tests-on-main:
+  e2e-test:
     runs-on: ubuntu-latest
     needs: test
 
@@ -50,6 +52,6 @@ jobs:
         working-directory: ./multivault
         run: npm install
 
-      - name: Run Jest Tests for Main
+      - name: Run E2E Tests
         working-directory: ./multivault
-        run: npm test
+        run: npm run test:e2e
