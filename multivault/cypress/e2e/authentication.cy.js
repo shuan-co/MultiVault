@@ -31,7 +31,7 @@ describe('Registration Flow', () => {
 
     it('Logouts a User Account', () => {
         cy.visit('https://multivault-e2e-test.netlify.app/private');
-        cy.contains('Logout Button').click();
+        cy.contains('Logout').click();
         cy.url().should('include', 'https://multivault-e2e-test.netlify.app/');
     });
 
@@ -92,7 +92,7 @@ describe('Registration Flow', () => {
 
     it('Logouts a Business Account', () => {
         cy.visit('https://multivault-e2e-test.netlify.app/private');
-        cy.contains('Logout Button').click();
+        cy.contains('Logout').click();
         cy.url().should('include', 'https://multivault-e2e-test.netlify.app/');
     });
 
@@ -143,7 +143,7 @@ describe('Login Flow', () => {
 
     it('Logouts a User Account', () => {
         cy.visit('https://multivault-e2e-test.netlify.app/private');
-        cy.contains('Logout Button').click();
+        cy.contains('Logout').click();
         cy.url().should('include', 'https://multivault-e2e-test.netlify.app/');
     });
 
@@ -182,7 +182,7 @@ describe('Login Flow', () => {
 
     it('Logouts a Business Account', () => {
         cy.visit('https://multivault-e2e-test.netlify.app/private');
-        cy.contains('Logout Button').click();
+        cy.contains('Logout').click();
         cy.url().should('include', 'https://multivault-e2e-test.netlify.app/');
     });
 
