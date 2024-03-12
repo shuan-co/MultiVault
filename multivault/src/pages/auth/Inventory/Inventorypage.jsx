@@ -5,17 +5,20 @@ import AddItem from './AddItem';
 import EditItem from './EditItem';
 
 import { auth, db } from '../../../firebase/firebase';
-import { collection, addDoc, getDocs, updateDoc, query, where } from "firebase/firestore";
+import { collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc, query, where } from "firebase/firestore";
+import { signOut, updateProfile } from 'firebase/auth';
 
 function Inventorypage() {
+
+  /*************************************************************** 
+                      Inventory Page Functions
+  ***************************************************************/
+  // - Item Details
   const [items, setItems] = useState([]);
-  const [showAddItem, setShowAddItem] = useState(false);
-  const [showEditItem, setShowEditItem] = useState(false);
-  const [itemToEdit, setItemToEdit] = useState(null);
-  const [selectedItems, setSelectedItems] = useState([]);
   const itemsCollectionRef = collection(db, `users/${auth.currentUser?.uid}/items`);
 
   useEffect(() => {
+    retrieveUser();
     retrieveItems();
   }, [])
 
@@ -34,6 +37,12 @@ function Inventorypage() {
     })
   }
 
+
+  /*************************************************************** 
+                      Add Items Functions
+  ***************************************************************/
+  const [showAddItem, setShowAddItem] = useState(false);
+
   const handleAddItem = (item) => {
     // Add the item
     addDoc(itemsCollectionRef, item)
@@ -48,6 +57,14 @@ function Inventorypage() {
     setShowAddItem(false); // Close the modal after item is added
     retrieveItems();
   };
+
+  /*************************************************************** 
+                      Edit Items Functions
+  ***************************************************************/
+   // - Edit Items
+   const [showEditItem, setShowEditItem] = useState(false);
+   const [itemToEdit, setItemToEdit] = useState(null);
+   const [selectedItems, setSelectedItems] = useState([]);
 
   const handleEditItem = async (updatedItem) => {
     console.log("updatedItem:", updatedItem); // Check the value of updatedItem
@@ -100,6 +117,9 @@ function Inventorypage() {
     });
   };
 
+  /*************************************************************** 
+                      Sort Items Functions
+  ***************************************************************/
   function sortItemsByMinQuantity () {
     setItems(items.slice().sort((a, b) => a.quantity - b.quantity))
   }
@@ -128,11 +148,96 @@ function Inventorypage() {
     );
   }
 
+  /*************************************************************** 
+                    Profile Sidebar Functions
+  ***************************************************************/
+  // - Profile Details
+  const [userData, setUserData] = useState(null);
+
+  const retrieveUser = async () => {
+    const user = auth.currentUser;
+
+    if (user) {
+      const userRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(userRef);
+
+      if (docSnap.exists()) {
+        setUserData(docSnap.data());
+      } else {
+        console.error('User data not found');
+      }
+    }
+  };
+
+  const deleteUser = async () => {
+    
+  }
+
+  const handleSave = (userData) => {
+    const user = auth.currentUser;
+
+    if( user ) {
+      const userRef = doc(db, 'users', user.uid);
+
+      updateDoc(userRef, userData).then(() => {
+        setUserData(userData);
+        alert("Profile updated successfully");
+      }).catch((error) => {
+        alert('Error updating profile');
+        console.error(error);
+      });
+
+      updateProfile(user, {
+        displayName: userData.firstName + ' ' + userData.lastName
+      }).catch((error) => {
+        console.error('Error updating display name:', error);
+      });
+    }
+    setUserData(userData);
+  };
+
+  const handleDeleteAccount = async () => {
+    const user = auth.currentUser;
+    if( user ) {
+        const userRef = doc(db, 'users', user.uid);
+
+        // - Delete user data from Firestore
+        deleteDoc(userRef).then(() => {
+          // - Delete user account
+          deleteUser(user).then(() => {
+            alert("Account deleted successfully");
+          }).catch((error) => {
+            alert('Error deleting account');
+            console.error(error);
+          });
+        }).catch((error) => {
+          alert('Error deleting user data');
+          console.error(error);
+        });
+    }
+  };
+
+  const handleLogout = () => {
+    signOut(auth).then(() => {
+      alert("Logged out Successfully");
+    }).catch((err) => {
+      alert('Log out error');
+      console.error(err);
+    });
+  }
+
+  /*************************************************************** 
+                          Return Function
+  ***************************************************************/
   return (
     <div className="Inventorypage">
       <div className="content">
         <main>
-          <Inventory items={items} onShowAddItem={() => setShowAddItem(true)}
+          <Inventory userData={userData}
+                     onSave={handleSave}
+                     onDelete={handleDeleteAccount}
+                     onLogout={handleLogout}
+                     items={items} onShowAddItem={() => setShowAddItem(true)}
                      onShowEditItem={() => setShowEditItem(true)} setItemToEdit={(item) => setItemToEdit(item)} 
                      onToggleSelectItem={handleToggleSelectItem} selectedItems={selectedItems}                     
                      sortItemsByMinQuantity={sortItemsByMinQuantity} 
