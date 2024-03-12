@@ -5,14 +5,22 @@ import './InventorySide.css';
 import { Pagination, Dropdown } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight, faAngleDown } from '@fortawesome/free-solid-svg-icons';
-import EditItem from './EditItem.jsx';
+import ProfileSection from './ProfileSection';
 
-const Inventory = ({ items, onShowAddItem, onShowEditItem, activeSubPage, sortItemsByMinQuantity, sortItemsByMaxQuantity, sortItemsAsc, sortItemsDesc, sortExpAsc, sortExpDesc, setItemToEdit, onToggleSelectItem, selectedItems }) => {
+const Inventory = ({ 
+  userData, onSave, onDelete, onLogout, items, onShowAddItem, onShowEditItem, 
+  activeSubPage, sortItemsByMinQuantity, sortItemsByMaxQuantity, sortItemsAsc, 
+  sortItemsDesc, sortExpAsc, sortExpDesc, setItemToEdit, onToggleSelectItem
+}) => {
+  // - Inventory Details
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
   const [sortBy, setSortBy] = useState('Name');
   const [filterBy, setFilterBy] = useState('All');
 
+  /*************************************************************** 
+                      Inventory Functions
+  ***************************************************************/
   const filteredItems = useMemo(() => {
     let tempItems = items;
 
@@ -66,17 +74,13 @@ const Inventory = ({ items, onShowAddItem, onShowEditItem, activeSubPage, sortIt
   return (
     <div className="main-container">
        <div className="sidebar">
-         <div className="profile">
-           <img src="https://www.pinclipart.com/picdir/middle/148-1486972_mystery-man-avatar-circle-clipart.png" alt="Profile" className="profile-image" />
-             <h3 className="profile-name">John Doe</h3>
-               <div className="button-container">
-                 <button className="sidebar-button">Button 1</button>
-                 <button className="sidebar-button">Button 2</button>
-                 <button className="sidebar-button">Button 3</button>
-                 <button className="sidebar-button">Button 4</button>
-               </div>
-               <button className="sidebar-button"></button>
-          </div> 
+          {userData ? (
+              <ProfileSection userData={userData} onSave={onSave} onDelete={onDelete} onLogout={onLogout}/>
+              ) : (
+                <div className="profile">
+                  <h3 className="profile-name">Loading...</h3>
+                </div>
+              )}
        </div>
        <div className="inventory-content">
         <div className="header">

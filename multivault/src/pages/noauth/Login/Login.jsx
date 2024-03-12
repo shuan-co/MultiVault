@@ -1,22 +1,28 @@
 // Login.jsx where authentication is done through Firebase Authetication
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import loginBg from './loginBg.jpg'
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../../../firebase/firebase';
 
-export default function Login({user}) {
-    const navigate = useNavigate();
-    const [activeButton, setActiveButton] = useState('User');
+export default function Login() {
+	const navigate = useNavigate();
+	const [activeButton, setActiveButton] = useState('User');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 
-	// Check if user exists
-    if (user) {
-        navigate('/inventory');
-    }
+	useEffect(() => {
+		const unsubscribe = onAuthStateChanged(auth, (user) => {
+		  if (user) {
+			// User is already logged in, redirect to inventory
+			navigate('/inventory');
+		  }
+		});
+	
+		return () => unsubscribe();
+	  }, [navigate]);
 
     const handleButtonClick = (button) => {
       	setActiveButton(button);
