@@ -2,7 +2,7 @@ describe('Iventory Item Management', () => {
 
     it('Add New Item', () => {
         cy.viewport(1920, 1080) 
-        cy.visit('http://localhost:3000/');
+        cy.visit('https://multivault-e2e-test.netlify.app/');
         
         // Select the Business account type
         cy.contains('Create an account').click();
@@ -70,7 +70,7 @@ describe('Iventory Item Management', () => {
 
     it('Check Item Information Consistency', () => {
         cy.viewport(1920, 1080) 
-        cy.visit('http://localhost:3000/inventory');
+        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
         cy.wait(1000);
 
         // Check Previosly Added Items Information after Website Refresh
@@ -99,7 +99,7 @@ describe('Iventory Item Management', () => {
 
     it('Multi Select / Deselect Items Feature', () => {
         cy.viewport(1920, 1080) 
-        cy.visit('http://localhost:3000/inventory');
+        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
         cy.wait(1000);
 
         // Select Multiple Items
@@ -119,7 +119,7 @@ describe('Iventory Item Management', () => {
 
     it('Multi Favorite / UnFavorite Items Feature', () => {
         cy.viewport(1920, 1080)
-        cy.visit('http://localhost:3000/inventory');
+        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
         cy.wait(1000);
 
         // Favorite Multiple Items
@@ -131,7 +131,7 @@ describe('Iventory Item Management', () => {
         cy.wait(3000);
 
         // Refresh Page to Double Check if Database had saved the information
-        cy.visit('http://localhost:3000/inventory');
+        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
         cy.wait(1000);
 
         // Check Changes
@@ -146,7 +146,7 @@ describe('Iventory Item Management', () => {
         cy.wait(3000);
 
         // Refresh Page to Double Check if Database had saved the information
-        cy.visit('http://localhost:3000/inventory');
+        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
         cy.wait(1000);
 
         // Check Changes
@@ -156,7 +156,7 @@ describe('Iventory Item Management', () => {
 
     it('Edit Selected Item', () => {
         cy.viewport(1920, 1080)
-        cy.visit('http://localhost:3000/inventory');
+        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
         cy.wait(1000);
 
         // Click Edit Button
@@ -175,7 +175,7 @@ describe('Iventory Item Management', () => {
         cy.wait(5000);
 
         // Refresh Page to Double Check if Database had saved the information
-        cy.visit('http://localhost:3000/inventory');
+        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
         cy.wait(1000);
 
         // Check the Changes
@@ -190,7 +190,7 @@ describe('Iventory Item Management', () => {
 
     it('Filter By Category, Perishable vs Non-Perishable vs All', () => {
         cy.viewport(1920, 1080)
-        cy.visit('http://localhost:3000/inventory');
+        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
         cy.wait(1000);
 
         // Filter by Perishable
@@ -222,12 +222,12 @@ describe('Iventory Item Management', () => {
 
     
     it('Delete Test Account', () => {
-        cy.visit("http://localhost:3000/private")
+        cy.visit("https://multivault-e2e-test.netlify.app/private")
         cy.wait(1000);
         cy.contains('Logout').click();
         cy.wait(1000);
 
-        cy.visit('http://localhost:3000/');
+        cy.visit('https://multivault-e2e-test.netlify.app/');
 
         cy.contains('Business').click();
 
@@ -238,9 +238,9 @@ describe('Iventory Item Management', () => {
         // Click the Register button
         cy.contains('Sign in').click();
 
-        cy.url().should('include', 'http://localhost:3000/inventory');
+        cy.url().should('include', 'https://multivault-e2e-test.netlify.app/inventory');
 
-        cy.visit("http://localhost:3000/private");
+        cy.visit("https://multivault-e2e-test.netlify.app/private");
         cy.contains('Delete Account').click();
         cy.wait(1000);
 
