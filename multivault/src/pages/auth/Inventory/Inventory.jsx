@@ -36,23 +36,6 @@ const Inventory = ({
     return differenceDays <= 2;
   }
 
-  // Check if an item is low on stock
-  const isLowOnStock = (item) => {
-    const tenPercentOfOriginal = item.quantityOrig * 0.1;
-    return item.quantityCurr <= tenPercentOfOriginal;
-  }
-
-  // Alert Expiration
-  const alertExpiry = (item) => {
-    const currDate = new Date();
-    const expiryDate = new Date(item.expiry);
-    // Calculate the difference between the two dates in milliseconds
-    const differenceMs = expiryDate - currDate;
-    // Convert milliseconds to days
-    const differenceDays = differenceMs / (1000 * 60 * 60 * 24);
-
-    return differenceDays <= 2;
-  }
 
   /*************************************************************** 
                       Inventory Functions
