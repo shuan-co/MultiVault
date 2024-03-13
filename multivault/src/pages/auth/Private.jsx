@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { auth, db } from '../../firebase/firebase';
-import { signOut, updateProfile } from 'firebase/auth';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { signOut, updateProfile, deleteUser } from 'firebase/auth';
+import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 export const Private = () => {
   const [userData, setUserData] = useState(null);
@@ -27,6 +27,28 @@ export const Private = () => {
       });
     }
   }, []);
+
+  const handleDeleteAccount = () => {
+    const user = auth.currentUser;
+
+    if (user) {
+      const userRef = doc(db, 'users', user.uid);
+
+      // Delete user data from Firestore
+      deleteDoc(userRef).then(() => {
+        // Delete user account
+        deleteUser(user).then(() => {
+          alert("Account deleted successfully");
+        }).catch((error) => {
+          alert('Error deleting account');
+          console.error(error);
+        });
+      }).catch((error) => {
+        alert('Error deleting user data');
+        console.error(error);
+      });
+    }
+  }
 
   const handleLogout = () => {
     signOut(auth).then(() => {
@@ -138,6 +160,7 @@ export const Private = () => {
         </div>
       )}
       <button onClick={handleLogout}>Logout</button>
+      <button onClick={handleDeleteAccount}>Delete Account</button>
     </div>
   );
 }
