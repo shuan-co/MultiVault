@@ -230,8 +230,9 @@ const Inventory = ({
 											class="item-select-checkbox"
 											type="checkbox"
 											onChange={() => onToggleSelectItem(item.index)}
+                      datatest-id='itemSelect'
 										/>
-										<button className="item-edit-button" onClick={() => {setItemToEdit(item); onShowEditItem();}}></button>
+                   <button className="item-edit-button" datatest-id="itemEdit" onClick={() => {setItemToEdit(item); onShowEditItem();}}></button>
                     <button
                       className="prioritize-button"
                       onClick={() => {
@@ -244,7 +245,7 @@ const Inventory = ({
                   </div>
                   <img src={item.imageurl} alt={item.name || "Default placeholder"}/>
                   <div className="item-name">
-                  <span className="item-value-name">{item.name}</span>
+                  <span className="item-value-name" data-testid="viewItemName">{item.name}</span>
                     </div>
                   <div className="item-details">
                   <div className="item-row">
@@ -253,7 +254,7 @@ const Inventory = ({
                   </div>
                   <div className="item-row">
                      <span className="item-title">PERISHABLE:</span>
-                     <span className="item-value">{item.status}</span>
+                     <span className="item-value" data-testid="itemValue">{item.status}</span>
                   </div>
                   <div className="item-row">
                      <span className={`item-title ${isLowOnStock(item) ? 'text-red': null}`}>QTY:</span>

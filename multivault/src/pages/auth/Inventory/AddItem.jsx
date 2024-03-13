@@ -87,20 +87,23 @@ const AddItem = ({ onAdd, show, onHide }) => {
               placeholder="Enter item name"
               value={itemName}
               onChange={(e) => setItemName(e.target.value)}
+              data-testid="itemName"
             />
             <input
               type="text"
               placeholder="Enter item description"
               value={itemDescription}
               onChange={(e) => setItemDescription(e.target.value)}
+              data-testid='itemDescription'
             />
             <input
               type="number"
               placeholder="Enter item quantity"
               value={itemQuantity}
               onChange={(e) => setItemQuantity(e.target.value)}
+              data-testid='itemQuantity'  
             />
-            <select value={itemStatus} onChange={(e) => setItemStatus(e.target.value)}>
+            <select value={itemStatus} onChange={(e) => setItemStatus(e.target.value)} data-testid='itemStatus'>
               <option value="">Select Status</option>
               <option value="Perishable">Perishable</option>
               <option value="Non-Perishable">Non-Perishable</option>
@@ -110,11 +113,13 @@ const AddItem = ({ onAdd, show, onHide }) => {
               placeholder="Expiry Date"
               value={itemExpiry}
               onChange={(e) => setItemExpiry(e.target.value)}
+              data-testid='itemDate'  
             />
             <input
               type="file"
               onChange={handleImageChange}
               accept="image/*"
+              data-testid='itemImage'  
             />
             <button type="submit">Submit</button>
           </form>
