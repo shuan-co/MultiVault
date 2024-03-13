@@ -14,7 +14,7 @@ on:
 
 jobs:
   unit-test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/releases'
 
     steps:
