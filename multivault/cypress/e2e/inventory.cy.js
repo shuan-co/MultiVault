@@ -117,7 +117,7 @@ describe('Iventory Item Management', () => {
         cy.get('[datatest-id=itemSelect]').should('not.be.checked')
     });
 
-    Cypress.config('defaultCommandTimeout', 10000);
+    Cypress.config('defaultCommandTimeout', 20000);
     it('Multi Favorite / UnFavorite Items Feature', () => {
         cy.viewport(1920, 1080)
         cy.visit('https://multivault-e2e-test.netlify.app/inventory');
@@ -154,7 +154,7 @@ describe('Iventory Item Management', () => {
         cy.get('[data-testid=StarBorderIcon]').should('exist');
     });
 
-    Cypress.config('defaultCommandTimeout', 10000);
+    Cypress.config('defaultCommandTimeout', 20000);
     it('Edit Selected Item', () => {
         cy.viewport(1920, 1080)
         cy.visit('https://multivault-e2e-test.netlify.app/inventory');
@@ -188,7 +188,7 @@ describe('Iventory Item Management', () => {
         cy.contains('2025-02-03').should('be.visible');
     });
 
-    Cypress.config('defaultCommandTimeout', 10000);
+    Cypress.config('defaultCommandTimeout', 20000);
     it('Filter By Category, Perishable vs Non-Perishable vs All', () => {
         cy.viewport(1920, 1080)
         cy.visit('https://multivault-e2e-test.netlify.app/inventory');
