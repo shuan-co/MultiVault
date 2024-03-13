@@ -22,7 +22,7 @@ const EditItem = ({ onEdit, show, onHide, item }) => {
         if (item) {
             setItemName(item.name);
             setItemDescription(item.description);
-            setItemQuantity(item.quantity);
+            setItemQuantity(item.quantityCurr);
             setItemStatus(item.status);
             setItemExpiry(item.expiry);
             setItemImage(item.imageurl);
@@ -48,7 +48,7 @@ const EditItem = ({ onEdit, show, onHide, item }) => {
                         ...item,
                         name: itemName,
                         description: itemDescription,
-                        quantity: itemQuantity,
+                        quantityCurr: itemQuantity,
                         status: itemStatus,
                         expiry : itemExpiry, 
                         index: itemIndex,
@@ -65,7 +65,7 @@ const EditItem = ({ onEdit, show, onHide, item }) => {
                 ...item,
                 name: itemName,
                 description: itemDescription,
-                quantity: itemQuantity,
+                quantityCurr: itemQuantity,
                 status: itemStatus,
                 expiry : itemExpiry, 
                 index: itemIndex,
