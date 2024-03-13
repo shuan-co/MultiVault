@@ -16,6 +16,7 @@ const AddItem = ({ onAdd, show, onHide }) => {
   const [itemExpiry, setItemExpiry] = useState(currDate);
   const [itemImage, setItemImage] = useState(null);
   const [itemIndex, setItemIndex] = useState(0);
+  const [isPrioritized, setIsPrioritized] = useState(false); // New state for prioritization
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,7 +31,7 @@ const AddItem = ({ onAdd, show, onHide }) => {
         .then((url) => {
             // Data with image URL
             if (!itemName.trim() || !itemDescription.trim() || !itemQuantity.trim()) return;
-            onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantityOrig: itemQuantity,  quantityCurr: itemQuantity, imageurl: url, expiry: itemExpiry, index: itemIndex });
+            onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantityOrig: itemQuantity,  quantityCurr: itemQuantity, imageurl: url, expiry: itemExpiry, index: itemIndex, prioritized: isPrioritized }); // Include prioritized field in the item data
             setItemName('');
             setItemDescription('');
             setItemQuantity('');
@@ -38,6 +39,7 @@ const AddItem = ({ onAdd, show, onHide }) => {
             setItemImage(null);
             setItemExpiry(currDate);
             setItemIndex(itemIndex+1);
+            setIsPrioritized(false);
             onHide();
         })
         .catch((err) => {
@@ -51,7 +53,7 @@ const AddItem = ({ onAdd, show, onHide }) => {
     else {
       // Data without image URL
       if (!itemName.trim() || !itemDescription.trim() || !itemQuantity.trim()) return;
-      onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantityOrig: itemQuantity, quantityCurr: itemQuantity, imageurl: '', expiry: itemExpiry, index: itemIndex });
+      onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantityOrig: itemQuantity, quantityCurr: itemQuantity, imageurl: '', expiry: itemExpiry, index: itemIndex, prioritized: isPrioritized }); // Include prioritized field in the item data
       setItemName('');
       setItemDescription('');
       setItemQuantity('');
@@ -59,6 +61,7 @@ const AddItem = ({ onAdd, show, onHide }) => {
       setItemImage(null);
       setItemExpiry(currDate);
       setItemIndex(itemIndex+1);
+      setIsPrioritized(false);
       onHide();
     }
   };
@@ -67,6 +70,9 @@ const AddItem = ({ onAdd, show, onHide }) => {
     setItemImage(e.target.files[0]);
   };
 
+  const handleTogglePrioritize = () => {
+    setIsPrioritized(prevState => !prevState); // Toggle the prioritization state
+  };
 
   return (
     <>
