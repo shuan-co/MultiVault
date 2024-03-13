@@ -1,5 +1,7 @@
 // cypress/integration/register_spec.js
 
+// For Local Usage
+
 describe('Registration Flow', () => {
     it('Registers a User Account', () => {
         cy.visit('http://localhost:3000/');
