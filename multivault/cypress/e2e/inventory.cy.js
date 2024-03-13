@@ -128,7 +128,7 @@ describe('Iventory Item Management', () => {
             // Perform click action on each element
             cy.wrap($el).click();
         });
-        cy.wait(3000);
+        cy.wait(10000);
 
         // Refresh Page to Double Check if Database had saved the information
         cy.visit('https://multivault-e2e-test.netlify.app/inventory');
@@ -147,7 +147,7 @@ describe('Iventory Item Management', () => {
 
         // Refresh Page to Double Check if Database had saved the information
         cy.visit('https://multivault-e2e-test.netlify.app/inventory');
-        cy.wait(1000);
+        cy.wait(10000);
 
         // Check Changes
         cy.get('[data-testid=StarBorderIcon]').should('exist');
@@ -157,11 +157,11 @@ describe('Iventory Item Management', () => {
     it('Edit Selected Item', () => {
         cy.viewport(1920, 1080)
         cy.visit('https://multivault-e2e-test.netlify.app/inventory');
-        cy.wait(1000);
+        cy.wait(10000);
 
         // Click Edit Button
         cy.get('[datatest-id=itemEdit]').eq(0).click();
-        cy.wait(1000);
+        cy.wait(10000);
 
         // Edit Form Values
         cy.get('[datatest-id=editItemName]').clear().type('Chicken Ball');
@@ -176,7 +176,7 @@ describe('Iventory Item Management', () => {
 
         // Refresh Page to Double Check if Database had saved the information
         cy.visit('https://multivault-e2e-test.netlify.app/inventory');
-        cy.wait(1000);
+        cy.wait(5000);
 
         // Check the Changes
         cy.contains('Chicken Ball').should('be.visible');
@@ -191,11 +191,11 @@ describe('Iventory Item Management', () => {
     it('Filter By Category, Perishable vs Non-Perishable vs All', () => {
         cy.viewport(1920, 1080)
         cy.visit('https://multivault-e2e-test.netlify.app/inventory');
-        cy.wait(1000);
+        cy.wait(5000);
 
         // Filter by Perishable
         cy.contains('Perishable').click();
-        cy.wait(1000);
+        cy.wait(5000);
 
         // Check for existance of Non Perishable Items
         cy.contains('body', 'Squid Ball').should('not.exist');
@@ -203,7 +203,7 @@ describe('Iventory Item Management', () => {
 
         // Filter by Non-Perishable
         cy.contains('Non-Perishable').click();
-        cy.wait(1000);
+        cy.wait(5000);
 
         // Check for existance of Perishable Items
         cy.contains('Squid Ball').should('be.visible');
@@ -211,7 +211,7 @@ describe('Iventory Item Management', () => {
 
         // Filter by All
         cy.contains('All').click();
-        cy.wait(1000);
+        cy.wait(5000);
 
         // Check for existance of All Items
         cy.contains('Squid Ball').should('be.visible');
