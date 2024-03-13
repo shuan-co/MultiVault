@@ -7,6 +7,7 @@ import EditItem from './EditItem';
 import { auth, db } from '../../../firebase/firebase';
 import { collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc, query, where } from "firebase/firestore";
 import { signOut, updateProfile } from 'firebase/auth';
+import { sendEmailNotification } from '../../../hooks/EmailNotification';
 
 function Inventorypage() {
 
@@ -16,6 +17,18 @@ function Inventorypage() {
   // - Item Details
   const [items, setItems] = useState([]);
   const itemsCollectionRef = collection(db, `users/${auth.currentUser?.uid}/items`);
+
+  // Alert Expiration
+  const alertExpiry = (item) => {
+    const currDate = new Date();
+    const expiryDate = new Date(item.expiry);
+    // Calculate the difference between the two dates in milliseconds
+    const differenceMs = expiryDate - currDate;
+    // Convert milliseconds to days
+    const differenceDays = differenceMs / (1000 * 60 * 60 * 24);
+
+    return differenceDays <= 2;
+  }
 
   useEffect(() => {
     retrieveUser();
@@ -94,6 +107,9 @@ function Inventorypage() {
       // Update the document with the new data
       updateDoc(doc.ref, updatedItem).then(() => {
         alert('Item Updated Successfully');
+        if (alertExpiry(updatedItem)) {
+          sendEmailNotification(auth.currentUser?.email, updatedItem);
+        }
       }).catch((err) => {
         alert('Error Updating Item');
         console.error(err);

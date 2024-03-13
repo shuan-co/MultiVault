@@ -18,6 +18,25 @@ const Inventory = ({
   const [sortBy, setSortBy] = useState('Name');
   const [filterBy, setFilterBy] = useState('All');
 
+  // Check if an item is low on stock
+  const isLowOnStock = (item) => {
+    const tenPercentOfOriginal = item.quantityOrig * 0.1;
+    return item.quantityCurr <= tenPercentOfOriginal;
+  }
+
+  // Alert Expiration
+  const alertExpiry = (item) => {
+    const currDate = new Date();
+    const expiryDate = new Date(item.expiry);
+    // Calculate the difference between the two dates in milliseconds
+    const differenceMs = expiryDate - currDate;
+    // Convert milliseconds to days
+    const differenceDays = differenceMs / (1000 * 60 * 60 * 24);
+
+    return differenceDays <= 2;
+  }
+
+
   /*************************************************************** 
                       Inventory Functions
   ***************************************************************/
@@ -111,7 +130,7 @@ const Inventory = ({
         <div className="inventory">
           {currentItems.length > 0 ? (
              currentItems.map((item, index) => (
-                <div key={index} className="item">
+                <div key={index} className={`item ${isLowOnStock(item) || alertExpiry(item) ? 'highlight-red' : null}`}>
                   <div className = "item-header">
                   <input
 											class="item-select-checkbox"
@@ -134,12 +153,12 @@ const Inventory = ({
                      <span className="item-value">{item.status}</span>
                   </div>
                   <div className="item-row">
-                     <span className="item-title">QTY:</span>
-                     <span className="item-value">{item.quantity}</span>
+                     <span className={`item-title ${isLowOnStock(item) ? 'text-red': null}`}>QTY:</span>
+                     <span className={`item-value ${isLowOnStock(item) ? 'text-red': null}`}>{item.quantityCurr}</span>
                   </div>
                   <div className="item-row">
-                     <span className="item-title">EXP:</span>
-                     <span className="item-value">{item.expiry}</span>
+                     <span className={`item-title ${alertExpiry(item) ? 'text-red': null}`}>EXP:</span>
+                     <span className={`item-value ${alertExpiry(item) ? 'text-red': null}`}>{item.expiry}</span>
                   </div>
                  </div>
                </div>
