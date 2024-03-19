@@ -83,10 +83,10 @@ const EditItem = ({ onEdit, show, onHide, item }) => {
     
     return (
         <Modal show={show} onHide={onHide} centered>
-            <Modal.Header closeButton>
+            <Modal.Header closeButton className='px-9 pt-8'>
                 <Modal.Title>Edit Item</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body className='px-9 pb-8 pt-5'>
                 <form onSubmit={handleSubmit}>
                     <input
                         type="text" value={itemName}
@@ -103,7 +103,7 @@ const EditItem = ({ onEdit, show, onHide, item }) => {
                         onChange={(e) => setItemQuantity(e.target.value)}
                         datatest-id="editItemQuantity"
                     />
-                    <select value={itemStatus} onChange={(e) => setItemStatus(e.target.value)} datatest-id="editItemStatus">
+                    <select value={itemStatus} onChange={(e) => setItemStatus(e.target.value)} datatest-id="editItemStatus" className='p-3 rounded-md border'>
                         <option value="">Select Status</option>
                         <option value="Perishable">Perishable</option>
                         <option value="Non-Perishable">Non-Perishable</option>
@@ -120,7 +120,7 @@ const EditItem = ({ onEdit, show, onHide, item }) => {
                         onChange={handleImageChange}
                         accept="image/*"
                     />
-                    <button type="submit">Submit</button>
+                    <button type="submit" className='text-white rounded-lg p-3 bg-blue-900'>Submit</button>
                 </form>
             </Modal.Body>
         </Modal>

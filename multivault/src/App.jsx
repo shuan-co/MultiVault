@@ -7,6 +7,7 @@ import Login from './pages/noauth/Login/Login.jsx';
 import Register from './pages/noauth/Register/Register.jsx';
 import { Private } from './pages/auth/Private.jsx';
 
+import Landing from './pages/noauth/Landing/Landing.jsx';
 import Inventorypage from './pages/auth/Inventory/Inventorypage.jsx';
 import ProfilePage from './pages/auth/Profile/ProfilePage.jsx';
 
@@ -35,7 +36,8 @@ const App = () => {
         ) : (
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Login user={user}/>} />
+              <Route path="/" element={<Landing user={user}/>} />
+              <Route path="/landing" element={<Landing user={user}/>} />
               <Route path="/login" element={<Login user={user}/>} />
               <Route path="/register" element={<Register user={user} />} />
               <Route path="/private" element={<ProtectedRoute user={user} children={<Private />} />} />

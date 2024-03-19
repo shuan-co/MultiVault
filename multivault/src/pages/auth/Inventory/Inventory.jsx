@@ -7,14 +7,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { collection, doc, getDoc, addDoc, getDocs, updateDoc, query, where, onSnapshot} from "firebase/firestore";
 import { auth, db } from '../../../firebase/firebase';
+import { Fragment } from 'react'
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { grey, yellow } from '@mui/material/colors'
 import ProfileSection from './ProfileSection';
 
 const Inventory = ({ 
   userData, onSave, onDelete, onLogout, items, onShowAddItem, onShowEditItem, 
-  activeSubPage, sortItemsByMinQuantity, sortItemsByMaxQuantity, sortItemsAsc, 
-  sortItemsDesc, sortExpAsc, sortExpDesc, setItemToEdit, onToggleSelectItem
+  activeSubPage, setItemToEdit, onToggleSelectItem
 }) => {
   // - Inventory Details
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,6 +25,8 @@ const Inventory = ({
   const [prioritizedItems, setPrioritizedItems] = useState({});
   const itemsCollectionRef = collection(db, `users/${auth.currentUser?.uid}/items`);
   const [allItems, setAllItems] = useState([]);
+  const [selected, setSelected] = useState('AZ');
+  
 
   useEffect(() => {
     const unsubscribe = onSnapshot(itemsCollectionRef, (snapshot) => {
@@ -73,6 +76,35 @@ const Inventory = ({
 
     return differenceDays <= 2;
   }
+
+  /*************************************************************** 
+                      Sort Items Functions
+  ***************************************************************/
+    function sortItemsByMinQuantity() {
+        // currentItems = (currentItems.slice().sort((a, b) => parseInt(a.quantityCurr) - parseInt(b.quantityCurr)));
+    }
+    
+    function sortItemsByMaxQuantity() {
+        // currentItems = (currentItems.slice().sort((a, b) => parseInt(b.quantityCurr) - parseInt(a.quantityCurr)));
+    }
+    
+    function sortItemsAsc() {
+        // currentItems = (currentItems.slice().sort((a, b) => a.name.localeCompare(b.name)));
+    }
+    
+    function sortItemsDesc() {
+        // currentItems = (currentItems.slice().sort((a, b) => b.name.localeCompare(a.name)));
+    }
+    
+    function sortExpAsc() {
+        // currentItems = (currentItems.slice().sort((a, b) => new Date(a.expiry) - new Date(b.expiry)));
+    }
+    
+    function sortExpDesc() {
+        // currentItems = (currentItems.slice().sort((a, b) => new Date(b.expiry) - new Date(a.expiry)));
+    }
+                    
+
 
 
   /*************************************************************** 
@@ -167,7 +199,7 @@ const Inventory = ({
 
   const handleToggleDropdown = (isOpen) => {
     console.log("Dropdown state before:", dropdownOpen);
-    setDropdownOpen(isOpen);
+    setDropdownOpen(false);
     console.log("Dropdown state after:", dropdownOpen);
   };
 
@@ -183,6 +215,24 @@ const Inventory = ({
     }
   };
 
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(' ')
+  }
+
+  useEffect(() => {
+    console.log(selected)
+    switch(selected){
+        case 'AZ': sortItemsAsc(); break;
+        case 'ZA': sortItemsDesc(); break;
+        case 'QA': sortItemsByMinQuantity(); break;
+        case 'QD': sortItemsByMaxQuantity(); break;
+        case 'EA': sortExpAsc(); break;
+        case 'ED': sortExpDesc(); break;
+        case 'F': break;
+        default: break;
+    }
+  }, [selected])
+
   return (
     <div className="main-container">
        <div className="sidebar">
@@ -194,109 +244,111 @@ const Inventory = ({
                 </div>
               )}
        </div>
-       <div className="inventory-content">
-        <div className="header">
-          <h2 className="title">
-            Sort By:
-            <Dropdown show={dropdownOpen} onToggle={handleToggleDropdown}>
-              <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                {sortBy}
-                <FontAwesomeIcon icon={faAngleDown} style={{ marginLeft: '5px' }} />
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => { setSortBy('A-Z'); setDropdownOpen(false); sortItemsAsc()}}>A-Z</Dropdown.Item>
-                <Dropdown.Item onClick={() => { setSortBy('Z-A'); setDropdownOpen(false); sortItemsDesc()}}>Z-A</Dropdown.Item>
-                <Dropdown.Item onClick={() => { setSortBy('Quantity Ascending'); setDropdownOpen(false); sortItemsByMinQuantity()}}>Quantity Ascending</Dropdown.Item>
-                <Dropdown.Item onClick={() => { setSortBy('Quantity Descending'); setDropdownOpen(false); sortItemsByMaxQuantity()}}>Quantity Descending</Dropdown.Item>
-                <Dropdown.Item onClick={() => { setSortBy('Expiration Date Ascending'); setDropdownOpen(false); sortExpAsc()}}>Expiration Ascending</Dropdown.Item>
-                <Dropdown.Item onClick={() => { setSortBy('Expiration Date Descending'); setDropdownOpen(false); sortExpDesc()}}>Expiration Descending</Dropdown.Item>
-                <Dropdown.Item onClick={() => { setSortBy('Favorited'); setDropdownOpen(false); }}>Favorited</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <div className="filter-buttons">
-              <button onClick={() => setFilterBy('All')} className={filterBy === 'All' ? 'active' : ''}>All</button>
-              <button onClick={() => setFilterBy('Perishable')} className={filterBy === 'Perishable' ? 'active' : ''}>Perishable</button>
-              <button onClick={() => setFilterBy('Non-Perishable')} className={filterBy === 'Non-Perishable' ? 'active' : ''}>Non-Perishable</button>
-            </div>
-            <button className="add-button" onClick={onShowAddItem}>ADD</button>
-          </h2>
-        </div>
-        <div className="inventory">
-          {currentItems.length > 0 ? (
-             currentItems.map((item, index) => (
-                <div key={index} className={`item ${isLowOnStock(item) || alertExpiry(item) ? 'highlight-red' : null}`}>
-                  <div className = "item-header">
-                  <input
-											class="item-select-checkbox"
-											type="checkbox"
-											onChange={() => onToggleSelectItem(item.index)}
-                      datatest-id='itemSelect'
-										/>
-                   <button className="item-edit-button" datatest-id="itemEdit" onClick={() => {setItemToEdit(item); onShowEditItem();}}></button>
-                    <button
-                      className="prioritize-button"
-                      onClick={() => {
-                        console.log('Button clicked. Item id:', item.id);
-                        togglePrioritize(item.id);
-                      }}
-                    >
-                      {prioritizedItems[item.id] ? <StarIcon /> : <StarBorderIcon />}
-                    </button>
-                  </div>
-                  <img src={item.imageurl} alt={item.name || "Default placeholder"}/>
-                  <div className="item-name">
-                  <span className="item-value-name" data-testid="viewItemName">{item.name}</span>
+       <div className="p-6 space-y-3 w-full">
+            <div className="header w-full p-5 bg-slate-200 rounded-xl">
+                <div className='flex items-center justify-between'>
+                    <div className='flex gap-3 items-center'>
+                        <h1>Sort By:</h1>
+                        <select value={selected} className='p-2 rounded-xl' onChange={(e) => setSelected(e.target.value)}>
+                            <option value={'AZ'}>A-Z</option>
+                            <option value={'ZA'}>Z-A</option>
+                            <option value={'QA'}>Quantity Ascending</option>
+                            <option value={'QD'}>Quantity Descending</option>
+                            <option value={'EA'}>Expiration Ascending</option>
+                            <option value={'ED'}>Expiration Descending</option>
+                            <option value={'F'}>Favorited</option>
+                        </select>
                     </div>
-                  <div className="item-details">
-                  <div className="item-row">
-                     <span className="item-title">DESCRIPTION:</span>
-                     <span className="item-value">{item.description}</span>
-                  </div>
-                  <div className="item-row">
-                     <span className="item-title">PERISHABLE:</span>
-                     <span className="item-value" data-testid="itemValue">{item.status}</span>
-                  </div>
-                  <div className="item-row">
-                     <span className={`item-title ${isLowOnStock(item) ? 'text-red': null}`}>QTY:</span>
-                     <span className={`item-value ${isLowOnStock(item) ? 'text-red': null}`}>{item.quantityCurr}</span>
-                  </div>
-                  <div className="item-row">
-                     <span className={`item-title ${alertExpiry(item) ? 'text-red': null}`}>EXP:</span>
-                     <span className={`item-value ${alertExpiry(item) ? 'text-red': null}`}>{item.expiry}</span>
-                  </div>
-                 </div>
-               </div>
-             ))
-           ) : (
-               <div className="no-items">No items available</div>
-           )}
-        </div>
-        <div className="pagination-container">
-         <Pagination>
-          {currentPage > 1 && (
-            <Pagination.Item onClick={handlePrevPage}>
-            <FontAwesomeIcon icon={faAngleLeft} />
-            </Pagination.Item>
-          )}
+                    <button className="add-button" onClick={onShowAddItem}>ADD</button>
+                </div>
+            </div>
+            <div className="filter-buttons ">
+                <button onClick={() => setFilterBy('All')} className={filterBy === 'All' ? 'active' : ''}>All</button>
+                <button onClick={() => setFilterBy('Perishable')} className={filterBy === 'Perishable' ? 'active' : ''}>Perishable</button>
+                <button onClick={() => setFilterBy('Non-Perishable')} className={filterBy === 'Non-Perishable' ? 'active' : ''}>Non-Perishable</button>
+            </div>
+            <div className="inventory">
+            {currentItems.length > 0 ? (
+                currentItems.map((item, index) => (
+                <div key={index} className={`item ${isLowOnStock(item) || alertExpiry(item) ? 'highlight-red' : ''} h-full shadow-2xl drop-shadow-2xl rounded-xl space-y-3`}>
+                        <div style={{backgroundImage: `url(${item.imageurl})`}} className="w-full bg-no-repeat bg-cover h-60 bg-center">
+                            <div className='item-header px-1 pt-1'>
+                                <input
+                                    class="item-select-checkbox"
+                                    type="checkbox"
+                                    onChange={() => onToggleSelectItem(item.index)}
+                                    datatest-id='itemSelect'
+                                />
+                                <button className="item-edit-button" datatest-id="itemEdit" onClick={() => {setItemToEdit(item); onShowEditItem();}}></button>
+                                <button
+                                    className="prioritize-button"
+                                    onClick={() => {
+                                    console.log('Button clicked. Item id:', item.id);
+                                    togglePrioritize(item.id);
+                                    }}
+                                >
+                                    {prioritizedItems[item.id] ? <StarIcon sx={{ color: yellow[500] }}/> : <StarBorderIcon sx={{ color: grey[50] }}/>}
+                                </button>
+                            </div>
+                        </div>
+                        {/*<img src={item.imageurl} alt={item.name || "Default placeholder"}></img>}*/}
+                        <div className='space-y-2'>
+                            <div className="item-name mx-auto text-center">
+                                <span className="text-xl font-bold" data-testid="viewItemName">{item.name}</span>
+                            </div>
+                            <div className="item-details px-4 pb-4">
+                                <div className="item-row space-x-2">
+                                    <span className="item-title text-lg font-bold">DESCRIPTION:</span>
+                                    <span className="item-value text-lg">{item.description}</span>
+                                </div>
+                                <div className="item-row space-x-2">
+                                    <span className="item-title text-lg font-bold">PERISHABLE:</span>
+                                    <span className="item-value text-lg" data-testid="itemValue">{item.status}</span>
+                                </div>
+                                <div className="item-row space-x-2">
+                                    <span className={`item-title ${isLowOnStock(item) ? 'text-red': null} text-lg font-bold`}>QTY:</span>
+                                    <span className={`item-value ${isLowOnStock(item) ? 'text-red': null} text-lg`}>{item.quantityCurr}</span>
+                                </div>
+                                <div className="item-row space-x-2">
+                                    <span className={`item-title ${alertExpiry(item) ? 'text-red': null} text-lg font-bold`}>EXP:</span>
+                                    <span className={`item-value ${alertExpiry(item) ? 'text-red': null} text-lg`}>{item.expiry}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                ))
+            ) : (
+                <div className="no-items">No items available</div>
+            )}
+            </div>
+            <div className="pagination-container">
+                <Pagination>
+                {currentPage > 1 && (
+                    <Pagination.Item onClick={handlePrevPage}>
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                    </Pagination.Item>
+                )}
 
-          {[...Array(totalPages)].map((_, idx) => (
-           <Pagination.Item
-            key={idx + 1}
-            active={idx + 1 === currentPage}
-            onClick={() => setCurrentPage(idx + 1)}
-           >
-            {idx + 1}
-           </Pagination.Item>
-          ))}
- 
-          {currentPage < totalPages && (
-           <Pagination.Item onClick={handleNextPage}>
-            <FontAwesomeIcon icon={faAngleRight} />
-           </Pagination.Item>
-          )}
-         </Pagination>
-       </div>
-      </div>
+                {[...Array(totalPages)].map((_, idx) => (
+                <Pagination.Item
+                    key={idx + 1}
+                    active={idx + 1 === currentPage}
+                    onClick={() => setCurrentPage(idx + 1)}
+                >
+                    {idx + 1}
+                </Pagination.Item>
+                ))}
+        
+                {currentPage < totalPages && (
+                <Pagination.Item onClick={handleNextPage}>
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </Pagination.Item>
+                )}
+                </Pagination>
+            </div>
+        </div>
     </div>
   );
 };

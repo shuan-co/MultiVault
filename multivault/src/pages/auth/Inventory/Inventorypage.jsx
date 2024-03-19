@@ -8,6 +8,7 @@ import { auth, db } from '../../../firebase/firebase';
 import { collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc, query, where } from "firebase/firestore";
 import { signOut, updateProfile } from 'firebase/auth';
 import { sendEmailNotification } from '../../../hooks/EmailNotification';
+import Navbar from '../Components/Navbar';
 
 function Inventorypage() {
 
@@ -247,6 +248,7 @@ function Inventorypage() {
   ***************************************************************/
   return (
     <div className="Inventorypage">
+        <Navbar/>
       <div className="content">
         <main>
           <Inventory userData={userData}

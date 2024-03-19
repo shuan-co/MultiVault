@@ -102,7 +102,7 @@ export default function Register({ user }) {
                 <h1 className='text-center text-white text-8xl inter font-extrabold'>MultiVault</h1>
 
                 {activeButton === 'User' ? (
-                    <form className='sm:w-1/3 md:w-1/3 lg:w-1/3 h-fit mx-auto bg-slate-200 rounded-xl p-5 border'
+                    <form className='w-11/12 sm:w-2/3 md:w-2/3 lg:w-2/3 xl:w-1/3 h-fit mx-auto bg-slate-200 rounded-xl p-5 border'
                         onSubmit={handleRegister}>
                         <div className='mb-6 text-center'>
                             <h2 className='font-bold text-2xl'>Sign up</h2>

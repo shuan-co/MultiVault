@@ -77,11 +77,11 @@ const AddItem = ({ onAdd, show, onHide }) => {
   return (
     <>
       <Modal show={show} onHide={onHide} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Item</Modal.Title>
+        <Modal.Header closeButton className='pt-7 px-9'>
+          <Modal.Title className='text-blue-900 text-start'>Add Item</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className='px-8 pb-9 pt-2'>
             <input
               type="text"
               placeholder="Enter item name"
@@ -103,7 +103,7 @@ const AddItem = ({ onAdd, show, onHide }) => {
               onChange={(e) => setItemQuantity(e.target.value)}
               data-testid='itemQuantity'  
             />
-            <select value={itemStatus} onChange={(e) => setItemStatus(e.target.value)} data-testid='itemStatus'>
+            <select value={itemStatus} onChange={(e) => setItemStatus(e.target.value)} data-testid='itemStatus' className='p-4 rounded-lg border' required>
               <option value="">Select Status</option>
               <option value="Perishable">Perishable</option>
               <option value="Non-Perishable">Non-Perishable</option>
@@ -121,7 +121,7 @@ const AddItem = ({ onAdd, show, onHide }) => {
               accept="image/*"
               data-testid='itemImage'  
             />
-            <button type="submit">Submit</button>
+            <button type="submit" className='rounded-xl bg-blue-900 hover:bg-blue-800 text-white'>Submit</button>
           </form>
         </Modal.Body>
       </Modal>

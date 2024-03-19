@@ -72,16 +72,16 @@ export default function Login() {
 		<div style={{ backgroundImage: `url(${loginBg})` }} className='flex items-center justify-center h-screen'>
 			<div className='w-screen space-y-10'>
 				<h1 className='text-center text-white text-8xl inter font-extrabold'>MultiVault</h1>
-				<div className='sm:w-1/3 md:w-1/3 lg:w-1/3 h-96 mx-auto bg-slate-200 rounded-xl p-5 border'>
+				<div className='w-11/12 sm:w-2/3 md:w-2/3 lg:w-1/2 xl:w-1/3 h-96 mx-auto bg-slate-200 rounded-xl p-5 border'>
 					<div className='mb-6 text-center'>
 						<h2 className='font-bold text-2xl'>Welcome!</h2>
-						<div className='text-white mt-3'>
-							<button className={`w-1/4 p-1 rounded-l-lg ${activeButton === 'User' ? 'bg-amber-500' : 'bg-zinc-500'} ${activeButton === 'User' ? 'hover:bg-amber-400' : 'hover:bg-zinc-400'} `}
+						<div className='text-white mt-3 w-full'>
+							<button className={`w-1/2 sm:w-1/2 md:w-1/2 lg:w-1/2 p-1 rounded-l-lg ${activeButton === 'User' ? 'bg-amber-500' : 'bg-zinc-500'} ${activeButton === 'User' ? 'hover:bg-amber-400' : 'hover:bg-zinc-400'} `}
 								onClick={() => handleButtonClick('User')}
 							>
 								User
 							</button>
-							<button className={`w-1/4 p-1 rounded-r-lg ${activeButton === 'Business' ? 'bg-amber-500' : 'bg-zinc-500'} ${activeButton === 'User' ? 'hover:bg-zinc-400' : 'hover:bg-amber-400'}`}
+							<button className={`w-1/2 sm:w-1/2 md:w-1/2 lg:w-1/2 p-1 rounded-r-lg ${activeButton === 'Business' ? 'bg-amber-500' : 'bg-zinc-500'} ${activeButton === 'User' ? 'hover:bg-zinc-400' : 'hover:bg-amber-400'}`}
 								onClick={() => handleButtonClick('Business')}
 							>
 								Business
@@ -99,9 +99,11 @@ export default function Login() {
 								<input type='password' id='password-input' placeholder='Enter your password' className='rounded-md p-2 w-full italic ps-3' data-testid="password"/>
 							</div>
 						</div>
-						<div className='mx-20 mt-3'>
-							<button type='submit' className='text-white bg-amber-500 w-full rounded-md p-2 hover:bg-amber-400'>Sign in</button>
-							<div className='text-center space-x-4 text-slate-400'>
+						<div className='mt-3 border w-full mx-auto border'>
+							<button type='submit' 
+                                    className='text-white bg-amber-500 rounded-md p-2 hover:bg-amber-400
+                                               mx-auto w-3/4 block'>Sign in</button>
+							<div className='text-center space-x-4 text-slate-400 border w-full'>
 								<a className='text-xs hover:underline underline-offset-4'>Forgot password</a>
 								<a onClick={() => navigate('/register')} className='text-xs hover:underline underline-offset-4'>Create an account</a>
 							</div>

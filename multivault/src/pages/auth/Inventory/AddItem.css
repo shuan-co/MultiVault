@@ -52,20 +52,14 @@
 .modal-body form input,
 .modal-body form button {
   padding: 10px;
-  border-radius: 5px;
   border: 1px solid #ddd; 
   font-size: 1em;
 }
 
 .modal-body form button {
-  background-color: #ff8800;
-  color: #fff;
   cursor: pointer;
 }
 
-.modal-body form button:hover {
-  background-color: #cc7000;
-}
 
 /* Close button styles */
 .close {
@@ -82,13 +76,12 @@
 
 .modal-header {
   border-bottom: none; 
-  padding: 20px; 
   display: flex;
   justify-content: space-between; 
 }
 
 .modal-title {
-  color: #ff8800;
+  font-size: 30px; 
 }
 
 .inventory-container {
