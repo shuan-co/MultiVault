@@ -3,6 +3,8 @@ import SideNav from './SideNav';
 import Inventory from './Inventory';
 import AddItem from './AddItem';
 import EditItem from './EditItem';
+import UseItem from './UseItem';
+import OrderItem from './OrderItem';
 
 import { auth, db } from '../../../firebase/firebase';
 import { collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc, query, where } from "firebase/firestore";
@@ -78,7 +80,6 @@ function Inventorypage() {
    // - Edit Items
    const [showEditItem, setShowEditItem] = useState(false);
    const [itemToEdit, setItemToEdit] = useState(null);
-   const [selectedItems, setSelectedItems] = useState([]);
 
   const handleEditItem = async (updatedItem) => {
     console.log("updatedItem:", updatedItem); // Check the value of updatedItem
@@ -91,8 +92,7 @@ function Inventorypage() {
     ));
 
     const docs = querySnapshot.docs;
-    console.log( docs );
-    if (docs.length === 0) {
+    if( docs.length === 0 ) {
       console.log('No matching document.');
       return null;
     }
@@ -124,15 +124,148 @@ function Inventorypage() {
     setShowEditItem(false); // Close the modal after item is added
   };
 
+  /*************************************************************** 
+                      Multiselect Functionality
+  ***************************************************************/
+  const [selectedItems, setSelectedItems] = useState([]);
   const handleToggleSelectItem = (index) => {
-    setSelectedItems(prevSelectedItems => {
-        if (prevSelectedItems.includes(index)) {
-            return prevSelectedItems.filter(itemIndex => itemIndex !== index);
-        } else {
-            return [...prevSelectedItems, index];
-        }
+    setSelectedItems(selectedItems => {
+      const selectedItemIndex = selectedItems.findIndex( item => item.index === index );
+
+      // - If the item is already in selectedItems, remove it
+      if( selectedItemIndex !== -1 ) {
+        return selectedItems.filter( item => item.index !== index );
+      } 
+      // - If the item is not in selectedItems, find it in items and add it to selectedItems
+      else {
+        const selectedItem = items.find( item => item.index === index );
+        if( selectedItem ) { return [...selectedItems, selectedItem]; }
+        return selectedItems;
+      }
     });
   };
+
+  /*************************************************************** 
+                      Usage History Functions
+  ***************************************************************/
+  const [showUseItem, setShowUseItem] = useState(false);
+  const usageHistoryCollectionRef = collection(db, `users/${auth.currentUser?.uid}/usageHistory`);
+
+  const handleUsageHistory = async( usedItems ) => {
+    const currentDateTime = new Date().toISOString();
+    const currentDate = currentDateTime.split('T')[0]; 
+    const currentTime = currentDateTime.split('T')[1].split('.')[0];    
+
+    try {
+      // - Add used items to the usage history collection
+      for( const usedItem of usedItems ) {
+        await addDoc(usageHistoryCollectionRef, {
+          index: usedItem.index,
+          name: usedItem.name,
+          quantityUsed: usedItem.quantityUsed,
+          usageDate: currentDate,
+          usageTime: currentTime,
+        });
+      }
+
+      // - Update the remaining quantity in the items collection
+      for( const usedItem of usedItems ) {
+        const usedItemSnapshot = await getDocs(query(
+          itemsCollectionRef, 
+          where('index', '==', usedItem.index)
+        ));
+
+        const docs = usedItemSnapshot.docs;
+        if( docs.length === 0 ) {
+          console.log('No matching document.');
+          return null;
+        }
+
+        // - Assuming there's only one document matching the index
+        const doc = docs[0];
+
+        // - Update the document with the new data
+        const item = doc.data();
+        const updatedQuantity = parseInt(item.quantityCurr) - parseInt(usedItem.quantityUsed);
+        updateDoc(doc.ref, {quantityCurr: updatedQuantity})
+
+        // - Update selected item
+        const selectedItemIndex = selectedItems.findIndex(selectedItem => selectedItem.index === usedItem.index );
+        if( selectedItemIndex !== - 1 ) {
+          selectedItems[selectedItemIndex].quantityCurr = updatedQuantity;
+        }
+      }
+
+      setShowUseItem(false); // - Close the modal after item is added
+      retrieveItems(); // - Refresh the items after updating the quantities
+      alert('Item(s) Used Successfully');
+
+    } catch( error ) {
+      console.error('Error handling usage history:', error);
+    }
+  };
+
+  /*************************************************************** 
+                      Order History Functions
+  ***************************************************************/
+  const [showOrderItem, setShowOrderItem] = useState(false);
+  const orderHistoryCollectionRef = collection(db, `users/${auth.currentUser?.uid}/orderHistory`);
+
+  const handleOrderHistory = async( orderedItems ) => {
+    const currentDateTime = new Date().toISOString();
+    const currentDate = currentDateTime.split('T')[0]; 
+    const currentTime = currentDateTime.split('T')[1].split('.')[0];    
+
+    try {
+      // - Add used items to the usage history collection
+      for( const orderedItem of orderedItems ) {
+        await addDoc(orderHistoryCollectionRef, {
+          index: orderedItem.index,
+          name: orderedItem.name,
+          quantityOrdered: orderedItem.quantityOrdered,
+          usageDate: currentDate,
+          usageTime: currentTime,
+        });
+      }
+
+      // - Update the remaining quantity in the items collection
+      for( const orderedItem of orderedItems ) {
+        const orderedItemSnapshot = await getDocs(query(
+          itemsCollectionRef, 
+          where('index', '==', orderedItem.index)
+        ));
+
+        const docs = orderedItemSnapshot.docs;
+        if( docs.length === 0 ) {
+          console.log('No matching document.');
+          return null;
+        }
+
+        // - Assuming there's only one document matching the index
+        const doc = docs[0];
+
+        // - Update the document with the new data
+        const item = doc.data();
+        const updatedQuantity =  parseInt(item.quantityCurr) + parseInt(orderedItem.quantityOrdered);
+        updateDoc(doc.ref, {quantityCurr: updatedQuantity})
+
+        // - Update selected item
+        const selectedItemIndex = selectedItems.findIndex(selectedItem => selectedItem.index === orderedItem.index );
+        if( selectedItemIndex !== - 1 ) {
+          selectedItems[selectedItemIndex].quantityCurr = updatedQuantity;
+        }
+      }
+
+      setShowOrderItem(false); // - Close the modal after item is added
+      retrieveItems(); // - Refresh the items after updating the quantities
+      alert('Item(s) Ordered Successfully');
+
+    } catch( error ) {
+      console.error('Error handling usage history:', error);
+      alert('Item Order Error');
+    }
+  };
+
 
   /*************************************************************** 
                       Sort Items Functions
@@ -257,15 +390,21 @@ function Inventorypage() {
                      onLogout={handleLogout}
                      items={items} onShowAddItem={() => setShowAddItem(true)}
                      onShowEditItem={() => setShowEditItem(true)} setItemToEdit={(item) => setItemToEdit(item)} 
-                     onToggleSelectItem={handleToggleSelectItem} selectedItems={selectedItems}                     
+                     onToggleSelectItem={handleToggleSelectItem} 
+                     selectedItems={selectedItems}                     
                      sortItemsByMinQuantity={sortItemsByMinQuantity} 
                      sortItemsByMaxQuantity={sortItemsByMaxQuantity}
                      sortItemsAsc={sortItemsAsc}
                      sortItemsDesc={sortItemsDesc}
                      sortExpAsc={sortExpAsc}
-                     sortExpDesc={sortExpDesc} />
+                     sortExpDesc={sortExpDesc} 
+                     onShowUseItem={() => setShowUseItem(true)}
+                     onShowOrderItem={() => setShowOrderItem(true)}
+                     />
           <AddItem onAdd={handleAddItem} show={showAddItem} onHide={() => setShowAddItem(false)} />
           <EditItem onEdit={handleEditItem} show={showEditItem} onHide={() => setShowEditItem(false)} item={itemToEdit} />
+          <UseItem onUse={handleUsageHistory} show={showUseItem} onHide={() => setShowUseItem(false)} selectedItems={selectedItems}/>
+          <OrderItem onOrder={handleOrderHistory} show={showOrderItem} onHide={() => setShowOrderItem(false)} selectedItems={selectedItems}/>
         </main>
       </div>
     </div>

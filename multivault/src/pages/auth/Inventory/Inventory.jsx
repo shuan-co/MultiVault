@@ -15,8 +15,10 @@ import ProfileSection from './ProfileSection';
 
 const Inventory = ({ 
   userData, onSave, onDelete, onLogout, items, onShowAddItem, onShowEditItem, 
-  activeSubPage, setItemToEdit, onToggleSelectItem
+  activeSubPage, setItemToEdit, onToggleSelectItem, 
+  selectedItems, onShowUseItem, onShowOrderItem,
 }) => {
+
   // - Inventory Details
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
@@ -27,7 +29,6 @@ const Inventory = ({
   const [allItems, setAllItems] = useState([]);
   const [selected, setSelected] = useState('AZ');
   
-
   useEffect(() => {
     const unsubscribe = onSnapshot(itemsCollectionRef, (snapshot) => {
       const itemsData = [];
@@ -39,7 +40,6 @@ const Inventory = ({
 
     return () => unsubscribe();
   }, []);
-
 
   useEffect(() => {
     const fetchPrioritizedItems = async () => {
@@ -104,8 +104,6 @@ const Inventory = ({
         // currentItems = (currentItems.slice().sort((a, b) => new Date(b.expiry) - new Date(a.expiry)));
     }
                     
-
-
 
   /*************************************************************** 
                       Inventory Functions
@@ -259,7 +257,11 @@ const Inventory = ({
                             <option value={'F'}>Favorited</option>
                         </select>
                     </div>
-                    <button className="add-button" onClick={onShowAddItem}>ADD</button>
+                    <div>
+                      <button className="add-button" onClick={onShowUseItem} disabled={selectedItems.length === 0}>USE ITEMS</button>
+                      <button className="add-button" onClick={onShowOrderItem} disabled={selectedItems.length === 0}>ORDER ITEMS</button>
+                      <button className="add-button" onClick={onShowAddItem}>ADD</button>
+                    </div>
                 </div>
             </div>
             <div className="filter-buttons ">
@@ -315,8 +317,6 @@ const Inventory = ({
                                 </div>
                             </div>
                         </div>
-                        
-                        
                     </div>
                 ))
             ) : (

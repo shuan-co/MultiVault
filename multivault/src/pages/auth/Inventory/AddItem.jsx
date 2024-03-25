@@ -1,10 +1,11 @@
 // AddItem.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
 import './AddItem.css';
 
-import { auth, storage } from '../../../firebase/firebase';
+import { auth, storage, db } from '../../../firebase/firebase';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { collection, doc, addDoc, getDoc, getDocs } from "firebase/firestore";
 import {v4} from 'uuid';
 
 const AddItem = ({ onAdd, show, onHide }) => {
@@ -20,6 +21,9 @@ const AddItem = ({ onAdd, show, onHide }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const newIndex = Date.now(); // - unique indexing, works cause we can only add 1 item at a time
+
     // Upload image
     if (itemImage != null) {
       const imageRef = ref(storage,  `${auth.currentUser?.uid}/${itemImage.name + v4()}`);
@@ -31,14 +35,13 @@ const AddItem = ({ onAdd, show, onHide }) => {
         .then((url) => {
             // Data with image URL
             if (!itemName.trim() || !itemDescription.trim() || !itemQuantity.trim()) return;
-            onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantityOrig: itemQuantity,  quantityCurr: itemQuantity, imageurl: url, expiry: itemExpiry, index: itemIndex, prioritized: isPrioritized }); // Include prioritized field in the item data
+            onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantityOrig: itemQuantity,  quantityCurr: itemQuantity, imageurl: url, expiry: itemExpiry, index: Date.now(), prioritized: isPrioritized }); // Include prioritized field in the item data
             setItemName('');
             setItemDescription('');
             setItemQuantity('');
             setItemStatus('');
             setItemImage(null);
             setItemExpiry(currDate);
-            setItemIndex(itemIndex+1);
             setIsPrioritized(false);
             onHide();
         })
@@ -53,14 +56,13 @@ const AddItem = ({ onAdd, show, onHide }) => {
     else {
       // Data without image URL
       if (!itemName.trim() || !itemDescription.trim() || !itemQuantity.trim()) return;
-      onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantityOrig: itemQuantity, quantityCurr: itemQuantity, imageurl: '', expiry: itemExpiry, index: itemIndex, prioritized: isPrioritized }); // Include prioritized field in the item data
+      onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantityOrig: itemQuantity, quantityCurr: itemQuantity, expiry: itemExpiry, index: Date.now(), prioritized: isPrioritized }); // Include prioritized field in the item data
       setItemName('');
       setItemDescription('');
       setItemQuantity('');
       setItemStatus('');
       setItemImage(null);
       setItemExpiry(currDate);
-      setItemIndex(itemIndex+1);
       setIsPrioritized(false);
       onHide();
     }
