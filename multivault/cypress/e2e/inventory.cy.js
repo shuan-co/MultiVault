@@ -2,7 +2,7 @@ describe('Iventory Item Management', () => {
     Cypress.config('defaultCommandTimeout', 10000);
     it('Add New Item', () => {
         cy.viewport(1920, 1080) 
-        cy.visit('https://multivault-e2e-test.netlify.app/');
+        cy.visit('localhost:3000/login');
         
         // Select the Business account type
         cy.contains('Create an account').click();
@@ -70,7 +70,7 @@ describe('Iventory Item Management', () => {
 
     it('Check Item Information Consistency', () => {
         cy.viewport(1920, 1080) 
-        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
+        cy.visit('localhost:3000/inventory');
         cy.wait(1000);
 
         // Check Previosly Added Items Information after Website Refresh
@@ -99,7 +99,7 @@ describe('Iventory Item Management', () => {
 
     it('Multi Select / Deselect Items Feature', () => {
         cy.viewport(1920, 1080) 
-        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
+        cy.visit('localhost:3000/inventory');
         cy.wait(1000);
 
         // Select Multiple Items
@@ -120,7 +120,7 @@ describe('Iventory Item Management', () => {
     Cypress.config('defaultCommandTimeout', 20000);
     it('Multi Favorite / UnFavorite Items Feature', () => {
         cy.viewport(1920, 1080)
-        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
+        cy.visit('localhost:3000/inventory');
         cy.wait(1000);
 
         // Favorite Multiple Items
@@ -132,7 +132,7 @@ describe('Iventory Item Management', () => {
         cy.wait(3000);
 
         // Refresh Page to Double Check if Database had saved the information
-        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
+        cy.visit('localhost:3000/inventory');
         cy.wait(1000);
 
         // Check Changes
@@ -147,7 +147,7 @@ describe('Iventory Item Management', () => {
         cy.wait(3000);
 
         // Refresh Page to Double Check if Database had saved the information
-        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
+        cy.visit('localhost:3000/inventory');
         cy.wait(1000);
 
         // Check Changes
@@ -157,7 +157,7 @@ describe('Iventory Item Management', () => {
     Cypress.config('defaultCommandTimeout', 20000);
     it('Edit Selected Item', () => {
         cy.viewport(1920, 1080)
-        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
+        cy.visit('localhost:3000/inventory');
         cy.wait(1000);
 
         // Click Edit Button
@@ -176,7 +176,7 @@ describe('Iventory Item Management', () => {
         cy.wait(5000);
 
         // Refresh Page to Double Check if Database had saved the information
-        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
+        cy.visit('localhost:3000/inventory');
         cy.wait(1000);
 
         // Check the Changes
@@ -191,7 +191,7 @@ describe('Iventory Item Management', () => {
     Cypress.config('defaultCommandTimeout', 20000);
     it('Filter By Category, Perishable vs Non-Perishable vs All', () => {
         cy.viewport(1920, 1080)
-        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
+        cy.visit('localhost:3000/inventory');
         cy.wait(1000);
 
         // Filter by Perishable
@@ -223,12 +223,12 @@ describe('Iventory Item Management', () => {
 
     
     it('Delete Test Account', () => {
-        cy.visit("https://multivault-e2e-test.netlify.app/private")
+        cy.visit("localhost:3000/private")
         cy.wait(1000);
         cy.contains('Logout').click();
         cy.wait(1000);
 
-        cy.visit('https://multivault-e2e-test.netlify.app/');
+        cy.visit('localhost:3000/login');
 
         cy.contains('Business').click();
 
@@ -239,9 +239,9 @@ describe('Iventory Item Management', () => {
         // Click the Register button
         cy.contains('Sign in').click();
 
-        cy.url().should('include', 'https://multivault-e2e-test.netlify.app/inventory');
+        cy.url().should('include', 'localhost:3000/inventory');
 
-        cy.visit("https://multivault-e2e-test.netlify.app/private");
+        cy.visit("localhost:3000/private");
         cy.contains('Delete Account').click();
         cy.wait(1000);
 
