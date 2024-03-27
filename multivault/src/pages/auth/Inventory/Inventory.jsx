@@ -28,6 +28,7 @@ const Inventory = ({
   const itemsCollectionRef = collection(db, `users/${auth.currentUser?.uid}/items`);
   const [allItems, setAllItems] = useState([]);
   const [selected, setSelected] = useState('AZ');
+  const [filteredItems, setFilteredItems] = useState([])
   
   useEffect(() => {
     const unsubscribe = onSnapshot(itemsCollectionRef, (snapshot) => {
@@ -81,71 +82,91 @@ const Inventory = ({
                       Sort Items Functions
   ***************************************************************/
     function sortItemsByMinQuantity() {
-        // currentItems = (currentItems.slice().sort((a, b) => parseInt(a.quantityCurr) - parseInt(b.quantityCurr)));
+        setFilteredItems([...filteredItems].sort((a, b) => parseInt(a.quantityCurr) - parseInt(b.quantityCurr)));
     }
-    
+        
     function sortItemsByMaxQuantity() {
-        // currentItems = (currentItems.slice().sort((a, b) => parseInt(b.quantityCurr) - parseInt(a.quantityCurr)));
+        setFilteredItems([...filteredItems].sort((a, b) => parseInt(b.quantityCurr) - parseInt(a.quantityCurr)));
     }
-    
+        
     function sortItemsAsc() {
-        // currentItems = (currentItems.slice().sort((a, b) => a.name.localeCompare(b.name)));
+        setFilteredItems([...filteredItems].sort((a, b) => a.name.localeCompare(b.name)));
     }
-    
+        
     function sortItemsDesc() {
-        // currentItems = (currentItems.slice().sort((a, b) => b.name.localeCompare(a.name)));
+        setFilteredItems([...filteredItems].sort((a, b) => b.name.localeCompare(a.name)));
     }
-    
+        
     function sortExpAsc() {
-        // currentItems = (currentItems.slice().sort((a, b) => new Date(a.expiry) - new Date(b.expiry)));
+        setFilteredItems([...filteredItems].sort((a, b) => new Date(a.expiry) - new Date(b.expiry)));
     }
-    
+        
     function sortExpDesc() {
-        // currentItems = (currentItems.slice().sort((a, b) => new Date(b.expiry) - new Date(a.expiry)));
+        setFilteredItems([...filteredItems].sort((a, b) => new Date(b.expiry) - new Date(a.expiry)));
     }
+
+    function sortFavorited() {
+        setFilteredItems([...filteredItems].sort((a, b) => {
+          const aIsFavorited = prioritizedItems[a.id] || false;
+          const bIsFavorited = prioritizedItems[b.id] || false;
+      
+          if (aIsFavorited && !bIsFavorited) {
+            return -1; // a comes before b
+          } else if (!aIsFavorited && bIsFavorited) {
+            return 1; // b comes before a
+          } else {
+            // If both are favorited or both are not favorited,
+            // sort them based on their names
+            return a.name.localeCompare(b.name);
+          }
+        }));
+      }
+      
+                    
                     
 
   /*************************************************************** 
                       Inventory Functions
   ***************************************************************/
-  const filteredItems = useMemo(() => {
-    let tempItems = allItems;
-
-    if (activeSubPage === 'low-stock') {
-      tempItems = allItems.filter(item => item.quantity <= 50);
-    }
-
-    if (filterBy === 'Perishable') {
-      tempItems = tempItems.filter(item => item.status === 'Perishable');
-    } else if (filterBy === 'Non-Perishable') {
-      tempItems = tempItems.filter(item => item.status === 'Non-Perishable');
-    }
-
-    if (filterBy === "Prioritized") {
-      tempItems = tempItems.filter((item) => prioritizedItems[item.id]);
-    }
+    useEffect(() => {
+        setFilteredItems(() => {
+        let tempItems = allItems;
     
-
-    switch (sortBy) {
-      case 'Name':
-        return [...tempItems].sort((a, b) => a.name.localeCompare(b.name));
-      case 'Quantity':
-        return [...tempItems].sort((a, b) => Number(a.quantity) - Number(b.quantity));
-      case 'Priority':
-        return [...tempItems].sort((a, b) => {
-          if (prioritizedItems[a.id] && !prioritizedItems[b.id]) {
-            return -1;
-          } else if (!prioritizedItems[a.id] && prioritizedItems[b.id]) {
-            return 1;
-          } else {
-            return a.name.localeCompare(b.name);
-          }
+        if (activeSubPage === 'low-stock') {
+            tempItems = allItems.filter(item => item.quantity <= 50);
+        }
+    
+        if (filterBy === 'Perishable') {
+            tempItems = tempItems.filter(item => item.status === 'Perishable');
+        } else if (filterBy === 'Non-Perishable') {
+            tempItems = tempItems.filter(item => item.status === 'Non-Perishable');
+        }
+    
+        if (filterBy === "Prioritized") {
+            tempItems = tempItems.filter((item) => prioritizedItems[item.id]);
+        }
+    
+        switch (sortBy) {
+            case 'Name':
+            return [...tempItems].sort((a, b) => a.name.localeCompare(b.name));
+            case 'Quantity':
+            return [...tempItems].sort((a, b) => Number(a.quantity) - Number(b.quantity));
+            case 'Priority':
+            return [...tempItems].sort((a, b) => {
+                if (prioritizedItems[a.id] && !prioritizedItems[b.id]) {
+                return -1;
+                } else if (!prioritizedItems[a.id] && prioritizedItems[b.id]) {
+                return 1;
+                } else {
+                return a.name.localeCompare(b.name);
+                }
+            });
+            default:
+            return tempItems;
+        }
         });
-      default:
-        return tempItems;
-    }
-     
-  }, [allItems, activeSubPage, sortBy, filterBy, prioritizedItems]);
+    }, [allItems, activeSubPage, sortBy, filterBy, prioritizedItems]);
+  
 
   const togglePrioritize = async (itemId) => {
     console.log(itemId);
@@ -226,7 +247,7 @@ const Inventory = ({
         case 'QD': sortItemsByMaxQuantity(); break;
         case 'EA': sortExpAsc(); break;
         case 'ED': sortExpDesc(); break;
-        case 'F': break;
+        case 'F': sortFavorited(); break;
         default: break;
     }
   }, [selected])
