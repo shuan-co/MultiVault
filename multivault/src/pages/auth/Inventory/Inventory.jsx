@@ -10,6 +10,7 @@ import { auth, db } from '../../../firebase/firebase';
 import { Fragment } from 'react'
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import EditIcon from '@mui/icons-material/Edit';
 import { grey, yellow } from '@mui/material/colors'
 import ProfileSection from './ProfileSection';
 
@@ -278,7 +279,7 @@ const Inventory = ({
                             <option value={'F'}>Favorited</option>
                         </select>
                     </div>
-                    <div>
+                    <div className='space-x-3'>
                       <button className="add-button" onClick={onShowUseItem} disabled={selectedItems.length === 0}>USE ITEMS</button>
                       <button className="add-button" onClick={onShowOrderItem} disabled={selectedItems.length === 0}>ORDER ITEMS</button>
                       <button className="add-button" onClick={onShowAddItem}>ADD</button>
@@ -293,27 +294,30 @@ const Inventory = ({
             <div className="inventory">
             {currentItems.length > 0 ? (
                 currentItems.map((item, index) => (
-                <div key={index} className={`item ${isLowOnStock(item) || alertExpiry(item) ? 'highlight-red' : ''} h-full shadow-2xl drop-shadow-2xl rounded-xl space-y-3`}>
-                        <div style={{backgroundImage: `url(${item.imageurl})`}} className="w-full bg-no-repeat bg-cover h-60 bg-center">
-                            <div className='item-header px-1 pt-1'>
-                                <input
-                                    class="item-select-checkbox"
-                                    type="checkbox"
-                                    onChange={() => onToggleSelectItem(item.index)}
-                                    datatest-id='itemSelect'
-                                />
-                                <button className="item-edit-button" datatest-id="itemEdit" onClick={() => {setItemToEdit(item); onShowEditItem();}}></button>
-                                <button
-                                    className="prioritize-button"
-                                    onClick={() => {
-                                    console.log('Button clicked. Item id:', item.id);
-                                    togglePrioritize(item.id);
-                                    }}
-                                >
-                                    {prioritizedItems[item.id] ? <StarIcon sx={{ color: yellow[500] }}/> : <StarBorderIcon sx={{ color: grey[50] }}/>}
-                                </button>
-                            </div>
-                        </div>
+                <div key={index} className={`item ${isLowOnStock(item) || alertExpiry(item) ? 'highlight-red' : 'bg-slate-300'} h-full shadow-2xl drop-shadow-2xl rounded-xl space-y-3`}>
+                    <div className='item-header px-2 pt-2'>
+                        <input
+                            class="item-select-checkbox"
+                            type="checkbox"
+                            onChange={() => onToggleSelectItem(item.index)}
+                            datatest-id='itemSelect'
+                        />
+                        <button className="" datatest-id="itemEdit" onClick={() => {setItemToEdit(item); onShowEditItem();}}>
+                            <EditIcon sx={{ color:grey[900]}}/>
+                        </button>
+                        <button
+                            className="prioritize-button"
+                            onClick={() => {
+                            console.log('Button clicked. Item id:', item.id);
+                            togglePrioritize(item.id);
+                            }}
+                        >
+                            {prioritizedItems[item.id] ? <StarIcon sx={{ color: yellow[900] }}/> : <StarBorderIcon sx={{ color: grey[900]}}/>}
+                        </button>
+                    </div>
+                    <div style={{backgroundImage: `url(${item.imageurl})`}} className="w-full bg-no-repeat bg-cover h-60 bg-center mt-5">
+                        
+                    </div>
                         {/*<img src={item.imageurl} alt={item.name || "Default placeholder"}></img>}*/}
                         <div className='space-y-2'>
                             <div className="item-name mx-auto text-center">

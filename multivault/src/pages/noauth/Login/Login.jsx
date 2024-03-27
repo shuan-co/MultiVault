@@ -70,8 +70,8 @@ export default function Login() {
 
 	return (
 		<div style={{ backgroundImage: `url(${loginBg})` }} className='flex items-center justify-center h-screen'>
-			<div className='w-screen space-y-10'>
-				<h1 className='text-center text-white text-8xl inter font-extrabold'>MultiVault</h1>
+			<div className='w-screen'>
+				<h1 className='text-center text-white text-8xl inter font-extrabold mb-5'>MultiVault</h1>
 				<div className='w-11/12 sm:w-2/3 md:w-2/3 lg:w-1/2 xl:w-1/3 h-96 mx-auto bg-slate-200 rounded-xl p-5 border'>
 					<div className='mb-6 text-center'>
 						<h2 className='font-bold text-2xl'>Welcome!</h2>
@@ -110,6 +110,9 @@ export default function Login() {
 						</div>
 					</form>
 				</div>
+                <div className='mx-auto text-center mt-5'>
+                    <button className='text-slate-100 hover:underline underline-offset-2' onClick={() => navigate('/landing')}>Back Home?</button>
+                </div>
 			</div>
 		</div>
 	)
