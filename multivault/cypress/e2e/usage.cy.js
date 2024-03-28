@@ -172,7 +172,7 @@ describe('Iventory Management Items', () => {
 
         cy.visit("https://multivault-e2e-test.netlify.app/private");
         cy.contains('Delete Account').click();
-        cy.wait(1000);
+        cy.wait(5000);
 
     });
 });
