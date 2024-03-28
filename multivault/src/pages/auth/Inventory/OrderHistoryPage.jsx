@@ -11,7 +11,7 @@ import './Inventory.css';
 import './InventoryHead.css';
 import './InventorySide.css';
 
-function UsageHistoryPage() {
+function OrderHistoryPage() {
 
   /*************************************************************** 
              User Data and Profile Functionalities
@@ -19,7 +19,6 @@ function UsageHistoryPage() {
   const [userData, setUserData] = useState(null);
   const [items, setItems] = useState([]);
   const itemsCollectionRef = collection(db, `users/${auth.currentUser?.uid}/items`);
-  const usageHistoryCollectionRef = collection(db, `users/${auth.currentUser?.uid}/usageHistory`);
   const orderHistoryCollectionRef = collection(db, `users/${auth.currentUser?.uid}/orderHistory`);
 
 
@@ -119,26 +118,26 @@ function UsageHistoryPage() {
   /*************************************************************** 
                           Order History
   ***************************************************************/
-  const [usageHistory, setUsageHistory] = useState([]);
+  const [orderHistory, setOrderHistory] = useState([]);
 
   useEffect(() => {
     retrieveUser();
-    retrieveUsageHistory();
+    retrieveOrderHistory();
   }, []);
 
-  const retrieveUsageHistory = async () => {
+  const retrieveOrderHistory = async () => {
     try {
-      const snapshot = await getDocs(usageHistoryCollectionRef);
-      const usageHistoryData = snapshot.docs.map((doc) => doc.data());
+      const snapshot = await getDocs(orderHistoryCollectionRef);
+      const orderHistoryData = snapshot.docs.map((doc) => doc.data());
 
       // Sort the order history based on usageDate and usageTime
-      const sortedUsageHistory = usageHistoryData.sort((a, b) => {
+      const sortedOrderHistory = orderHistoryData.sort((a, b) => {
         const dateA = new Date(`${a.usageDate} ${a.usageTime}`);
         const dateB = new Date(`${b.usageDate} ${b.usageTime}`);
         return dateB - dateA; // Sort in descending order (latest first)
       });
 
-      setUsageHistory(sortedUsageHistory);
+      setOrderHistory(sortedOrderHistory);
       console.log("Order history retrieved successfully");
     } catch (error) {
       console.error("Error retrieving order history:", error);
@@ -167,24 +166,24 @@ function UsageHistoryPage() {
               <div className="p-6 space-y-3 w-full">
               <div className="header w-full p-5 bg-slate-200 rounded-xl"></div>
               <div className="order-history-container">
-                <h1>Usage History</h1>
-                {usageHistory.length > 0 ? (
+                <h1>Order History</h1>
+                {orderHistory.length > 0 ? (
                   <table>
                     <thead>
                       <tr>
                         <th>Product Name</th>
-                        <th>Quantity Used</th>
+                        <th>Quantity Ordered</th>
                         <th>Date</th>
                         <th>Time</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {usageHistory.map((usage, index) => (
+                      {orderHistory.map((order, index) => (
                         <tr key={index}>
-                          <td>{usage.name}</td>
-                          <td>{usage.quantityUsed}</td>
-                          <td>{usage.usageDate}</td>
-                          <td>{usage.usageTime}</td>
+                          <td>{order.name}</td>
+                          <td>{order.quantityOrdered}</td>
+                          <td>{order.usageDate}</td>
+                          <td>{order.usageTime}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -201,4 +200,4 @@ function UsageHistoryPage() {
   );
 }
 
-export default UsageHistoryPage;
+export default OrderHistoryPage;

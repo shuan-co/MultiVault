@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ProfileModal from './ProfileModal';
+import { Link } from 'react-router-dom';
 
 const ProfileSection = ({ userData, onSave, onDelete, onLogout }) => {
 
@@ -73,8 +74,9 @@ const ProfileSection = ({ userData, onSave, onDelete, onLogout }) => {
       )}
       <div className="button-container">
         <button className="sidebar-button" onClick={handleViewProfile}>View Profile</button>
-        <button className="sidebar-button">Usage History</button>
-        <button className="sidebar-button">Order History</button>
+        <Link to="/inventory" className="sidebar-button">View Inventory</Link>
+        <Link to="/usageHistory" className="sidebar-button">Usage History</Link>
+        <Link to="/orderHistory" className="sidebar-button">Order History</Link>
       </div>
       <button className="sidebar-button" onClick={handleLogout}>Logout</button>
       {showProfileModal && (

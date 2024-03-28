@@ -9,6 +9,8 @@ import { Private } from './pages/auth/Private.jsx';
 
 import Landing from './pages/noauth/Landing/Landing.jsx';
 import Inventorypage from './pages/auth/Inventory/Inventorypage.jsx';
+import UsageHistoryPage from './pages/auth/Inventory/UsageHistoryPage.jsx';
+import OrderHistoryPage from './pages/auth/Inventory/OrderHistoryPage.jsx';
 import ProfilePage from './pages/auth/Profile/ProfilePage.jsx';
 
 const App = () => {
@@ -43,6 +45,8 @@ const App = () => {
               <Route path="/private" element={<ProtectedRoute user={user} children={<Private />} />} />
               <Route path="/inventory" element={<ProtectedRoute user={user} children={<Inventorypage />} />} />
               <Route path="/profile" element={<ProtectedRoute user={user} children={<ProfilePage />} />} />
+              <Route path="/usageHistory" element={<ProtectedRoute user={user} children={<UsageHistoryPage />} />} />
+              <Route path="/orderHistory" element={<ProtectedRoute user={user} children={<OrderHistoryPage />} />} />
             </Routes>
           </BrowserRouter>
         )}
