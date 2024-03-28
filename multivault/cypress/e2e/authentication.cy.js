@@ -2,7 +2,7 @@
 
 describe('Registration Flow', () => {
     it('Registers a User Account', () => {
-        cy.visit('localhost:3000/login');
+        cy.visit('https://multivault-e2e-test.netlify.app/login');
         cy.contains('Create an account').click();
         
         // Select the User account type
@@ -19,7 +19,7 @@ describe('Registration Flow', () => {
         // Click the Register button
         cy.contains('Register').click();
 
-        cy.url().should('include', 'localhost:3000/inventory');
+        cy.url().should('include', 'https://multivault-e2e-test.netlify.app/inventory');
 
         // Intercept the alert
         cy.on('window:alert', (message) => {
@@ -30,13 +30,13 @@ describe('Registration Flow', () => {
     });
 
     it('Logouts a User Account', () => {
-        cy.visit('localhost:3000/private');
+        cy.visit('https://multivault-e2e-test.netlify.app/private');
         cy.contains('Logout').click();
-        cy.url().should('include', 'localhost:3000/');
+        cy.url().should('include', 'https://multivault-e2e-test.netlify.app/');
     });
 
     it('Attempts to User Register with the Same Email (Error Case)', () => {
-        cy.visit('localhost:3000/login');
+        cy.visit('https://multivault-e2e-test.netlify.app/login');
 
         // Select the Business account type
         cy.contains('Create an account').click();
@@ -60,7 +60,7 @@ describe('Registration Flow', () => {
     });
 
     it('Registers a Business Account', () => {
-        cy.visit('localhost:3000/login'); 
+        cy.visit('https://multivault-e2e-test.netlify.app/login'); 
 
         // Select the Business account type
         cy.contains('Create an account').click();
@@ -79,7 +79,7 @@ describe('Registration Flow', () => {
 
         // Click the Register button
         cy.contains('Register').click();
-        cy.url().should('include', 'localhost:3000/inventory'); 
+        cy.url().should('include', 'https://multivault-e2e-test.netlify.app/inventory'); 
 
         // Intercept the alert
         cy.on('window:alert', (message) => {
@@ -91,14 +91,14 @@ describe('Registration Flow', () => {
     });
 
     it('Logouts a Business Account', () => {
-        cy.visit('localhost:3000/private');
+        cy.visit('https://multivault-e2e-test.netlify.app/private');
         cy.contains('Logout').click();
-        cy.url().should('include', 'localhost:3000/');
+        cy.url().should('include', 'https://multivault-e2e-test.netlify.app/');
     });
 
 
     it('Attempts to Register with the Same Business Email (Error Case)', () => {
-        cy.visit('localhost:3000/login');
+        cy.visit('https://multivault-e2e-test.netlify.app/login');
 
         // Select the Business account type
         cy.contains('Create an account').click();
@@ -129,7 +129,7 @@ describe('Registration Flow', () => {
 
 describe('Login Flow', () => {
     it('Login an existing User Account', () => {
-        cy.visit('localhost:3000/login');
+        cy.visit('https://multivault-e2e-test.netlify.app/login');
 
         // Fill the registration form for the User account
         cy.get('[data-testid=email]').type('john.doe@example.com');
@@ -138,17 +138,17 @@ describe('Login Flow', () => {
         // Click the Register button
         cy.contains('Sign in').click();
 
-        cy.url().should('include', 'localhost:3000/inventory');
+        cy.url().should('include', 'https://multivault-e2e-test.netlify.app/inventory');
     });
 
     it('Logouts a User Account', () => {
-        cy.visit('localhost:3000/private');
+        cy.visit('https://multivault-e2e-test.netlify.app/private');
         cy.contains('Logout').click();
-        cy.url().should('include', 'localhost:3000/');
+        cy.url().should('include', 'https://multivault-e2e-test.netlify.app/');
     });
 
     it('Login an invalid User Account', () => {
-        cy.visit('localhost:3000/login');
+        cy.visit('https://multivault-e2e-test.netlify.app/login');
 
         // Fill the registration form for the User account
         cy.get('[data-testid=email]').type('john.doe@true.com');
@@ -166,7 +166,7 @@ describe('Login Flow', () => {
 
 
     it('Login a Business Account', () => {
-        cy.visit('localhost:3000/login');
+        cy.visit('https://multivault-e2e-test.netlify.app/login');
 
         cy.contains('Business').click();
 
@@ -177,18 +177,18 @@ describe('Login Flow', () => {
         // Click the Register button
         cy.contains('Sign in').click();
 
-        cy.url().should('include', 'localhost:3000/inventory');
+        cy.url().should('include', 'https://multivault-e2e-test.netlify.app/inventory');
     });
 
     it('Logouts a Business Account', () => {
-        cy.visit('localhost:3000/private');
+        cy.visit('https://multivault-e2e-test.netlify.app/private');
         cy.contains('Logout').click();
-        cy.url().should('include', 'localhost:3000/');
+        cy.url().should('include', 'https://multivault-e2e-test.netlify.app/');
     });
 
 
     it('Login an invalid Business Account', () => {
-        cy.visit('localhost:3000/login');
+        cy.visit('https://multivault-e2e-test.netlify.app/login');
 
         // Fill the registration form for the User account
         cy.get('[data-testid=email]').type('admin1@true.com');
@@ -211,7 +211,7 @@ describe("Check if can View and Edit Profile Information", () => {
     it("Check if can view and edit profile information", () => {
         cy.viewport(1920, 1080);
 
-        cy.visit('localhost:3000/login');
+        cy.visit('https://multivault-e2e-test.netlify.app/login');
 
         // Fill the registration form for the User account
         cy.get('[data-testid=email]').type('john.doe@example.com');
@@ -231,7 +231,7 @@ describe("Check if can View and Edit Profile Information", () => {
         cy.contains('Save').click();
         cy.wait(5000);
         
-        cy.visit('localhost:3000/inventory');
+        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
         cy.wait(1000);
 
         cy.contains('View Profile').click();
@@ -242,9 +242,9 @@ describe("Check if can View and Edit Profile Information", () => {
 
     it('Logouts a User Account', () => {
         cy.viewport(1920, 1080);
-        cy.visit('localhost:3000/private');
+        cy.visit('https://multivault-e2e-test.netlify.app/private');
         cy.contains('Logout').click();
-        cy.url().should('include', 'localhost:3000/');
+        cy.url().should('include', 'https://multivault-e2e-test.netlify.app/');
     });
 
 
@@ -253,7 +253,7 @@ describe("Check if can View and Edit Profile Information", () => {
 
 describe('Check if Registered Information reflected properly in the Database', () => {
     it('Check if User Account Information is Consistent', () => {
-        cy.visit('localhost:3000/login');
+        cy.visit('https://multivault-e2e-test.netlify.app/login');
 
         // Fill the registration form for the User account
         cy.get('[data-testid=email]').type('john.doe@example.com');
@@ -262,7 +262,7 @@ describe('Check if Registered Information reflected properly in the Database', (
         // Click the Register button
         cy.contains('Sign in').click();
         cy.wait(5000);
-        cy.visit('localhost:3000/private');
+        cy.visit('https://multivault-e2e-test.netlify.app/private');
 
 
         // Check if First Name is visible
@@ -294,7 +294,7 @@ describe('Check if Registered Information reflected properly in the Database', (
     });
 
     it('Check if Business Account Information is Consistent', () => {
-        cy.visit('localhost:3000/login');
+        cy.visit('https://multivault-e2e-test.netlify.app/login');
 
         // Fill the registration form for the User account
         cy.get('[data-testid=email]').type('admin1@example.com');
@@ -303,7 +303,7 @@ describe('Check if Registered Information reflected properly in the Database', (
         // Click the Register button
         cy.contains('Sign in').click();
         cy.wait(5000);
-        cy.visit('localhost:3000/private');
+        cy.visit('https://multivault-e2e-test.netlify.app/private');
         // Check if First Name is visible
         cy.contains('First Name: Admin1').should('be.visible');
 

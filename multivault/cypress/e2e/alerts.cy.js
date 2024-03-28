@@ -3,7 +3,7 @@ describe('Iventory Item Alerts', () => {
 
     it('Checks for Email Alerts and Information Consistency for Near Expiring Items', () => {
         cy.viewport(1920, 1080);
-        cy.visit('localhost:3000/login');
+        cy.visit('https://multivault-e2e-test.netlify.app/login');
 
         // Select the Business account type
         cy.contains('Create an account').click();
@@ -67,7 +67,7 @@ describe('Iventory Item Alerts', () => {
         cy.wait(5000);
 
         // Refresh Page to Double Check if Database had saved the information
-        cy.visit('localhost:3000/inventory');
+        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
         cy.wait(1000);
 
         cy.wait(10000);
@@ -108,7 +108,7 @@ describe('Iventory Item Alerts', () => {
 
     it('Checks if User Interface warns for Near Expiring Items', () => {
         cy.viewport(1920, 1080);
-        cy.visit('localhost:3000/inventory');
+        cy.visit('https://multivault-e2e-test.netlify.app/inventory');
         cy.wait(5000);
         // Select the parent div element with class "inventory" and get its first-level div children
         cy.get('.inventory > div').then(($children) => {
@@ -122,12 +122,12 @@ describe('Iventory Item Alerts', () => {
 
 
     it('Delete Test Account', () => {
-        cy.visit("localhost:3000/private")
+        cy.visit("https://multivault-e2e-test.netlify.app/private")
         cy.wait(1000);
         cy.contains('Logout').click();
         cy.wait(1000);
 
-        cy.visit('localhost:3000/login');
+        cy.visit('https://multivault-e2e-test.netlify.app/login');
 
         cy.contains('Business').click();
 
@@ -138,9 +138,9 @@ describe('Iventory Item Alerts', () => {
         // Click the Register button
         cy.contains('Sign in').click();
 
-        cy.url().should('include', 'localhost:3000/inventory');
+        cy.url().should('include', 'https://multivault-e2e-test.netlify.app/inventory');
 
-        cy.visit("localhost:3000/private");
+        cy.visit("https://multivault-e2e-test.netlify.app/private");
         cy.contains('Delete Account').click();
         cy.wait(1000);
 
