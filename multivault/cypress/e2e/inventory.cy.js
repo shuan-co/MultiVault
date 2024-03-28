@@ -249,3 +249,149 @@ describe('Iventory Item Management', () => {
 
 
 });
+
+describe("Iventory Sorting Feature", () => {
+    it("Create Test Account", () => {
+        cy.viewport(1920, 1080);
+        cy.visit('localhost:3000/login');
+        cy.contains('Create an account').click();
+
+        // Select the User account type
+        cy.contains('User').click();
+
+        // Fill the registration form for the User account
+        cy.get('[data-testid=firstName]').type('John');
+        cy.get('[data-testid=lastName]').type('Doe');
+        cy.get('[data-testid=sex]').select('Male');
+        cy.get('[data-testid=birthday]').type('2003-01-23');
+        cy.get('[data-testid=email]').type('john.doe@example.com');
+        cy.get('[data-testid=password]').type('userPassword123');
+
+        // Click the Register button
+        cy.contains('Register').click();
+        cy.wait(5000);
+    });
+
+    it("Create Test Items", () => {
+        cy.viewport(1920, 1080);
+        cy.visit('localhost:3000/inventory');
+
+
+        // Click the Add Item button
+        cy.contains('ADD').click();
+
+        // Fill Add Item Form
+        cy.get('[data-testid=itemName]').type('Water');
+        cy.get('[data-testid=itemDescription]').type('Lorem ipsum dolor sit amet');
+        cy.get('[data-testid=itemQuantity]').type('300');
+        cy.get('[data-testid=itemStatus]').select('Perishable');
+        cy.get('[data-testid=itemDate]').type('2024-03-25');
+
+        // Submit Item
+        cy.contains('Submit').click();
+
+        // Click the Add Item button
+        cy.contains('ADD').click();
+
+        // Fill Add Item Form
+        cy.get('[data-testid=itemName]').type('Book Shelf');
+        cy.get('[data-testid=itemDescription]').type('Lorem ipsum dolor sit amet');
+        cy.get('[data-testid=itemQuantity]').type('150');
+        cy.get('[data-testid=itemStatus]').select('Non-Perishable');
+        cy.get('[data-testid=itemDate]').type('2024-03-16');
+
+        // Submit Item
+        cy.contains('Submit').click();
+
+        // Click the Add Item button
+        cy.contains('ADD').click();
+
+        // Fill Add Item Form
+        cy.get('[data-testid=itemName]').type('Apples');
+        cy.get('[data-testid=itemDescription]').type('Lorem ipsum dolor sit amet');
+        cy.get('[data-testid=itemQuantity]').type('200');
+        cy.get('[data-testid=itemStatus]').select('Perishable');
+        cy.get('[data-testid=itemDate]').type('2024-03-13');
+
+        // Submit Item
+        cy.contains('Submit').click();
+    });
+
+    it("Sort Items by Name: Z-A", () => {
+        cy.viewport(1920, 1080);
+        cy.visit('localhost:3000/inventory');
+        cy.wait(2000);
+        cy.get('select.p-2.rounded-xl').select('ZA');
+
+        cy.get('[data-testid=viewItemName]').eq(0).should('have.text', 'Water');
+        cy.get('[data-testid=viewItemName]').eq(1).should('have.text', 'Book Shelf');
+        cy.get('[data-testid=viewItemName]').eq(2).should('have.text', 'Apples');
+    });
+
+    it("Sort Items by Name: A-Z", () => {
+        cy.viewport(1920, 1080);
+        cy.visit('localhost:3000/inventory');
+        cy.wait(2000);
+        cy.get('select.p-2.rounded-xl').select('AZ');
+
+        cy.get('[data-testid=viewItemName]').eq(2).should('have.text', 'Water');
+        cy.get('[data-testid=viewItemName]').eq(1).should('have.text', 'Book Shelf');
+        cy.get('[data-testid=viewItemName]').eq(0).should('have.text', 'Apples');
+    });
+
+    it("Sort Items by Quantity: Ascending", () => {
+        cy.viewport(1920, 1080);
+        cy.visit('localhost:3000/inventory');
+        cy.wait(2000);
+        cy.get('select.p-2.rounded-xl').select('QA');
+        cy.wait(2000);
+
+        cy.get('[class="item-value null text-lg"]').eq(0).should('have.text', 150);
+        cy.get('[class="item-value null text-lg"]').eq(1).should('have.text', 200);
+        cy.get('[class="item-value null text-lg"]').eq(2).should('have.text', 300);
+    });
+
+    it("Sort Items by Quantity: Descending", () => {
+        cy.viewport(1920, 1080);
+        cy.visit('localhost:3000/inventory');
+        cy.wait(2000);
+        cy.get('select.p-2.rounded-xl').select('QD');
+        cy.wait(2000);
+
+        cy.get('[class="item-value null text-lg"]').eq(2).should('have.text', 150);
+        cy.get('[class="item-value null text-lg"]').eq(1).should('have.text', 200);
+        cy.get('[class="item-value null text-lg"]').eq(0).should('have.text', 300);
+    });
+
+    it("Sort Items by Expiration: Ascending", () => {
+        cy.viewport(1920, 1080);
+        cy.visit('localhost:3000/inventory');
+        cy.wait(2000);
+        cy.get('select.p-2.rounded-xl').select('EA');
+        cy.wait(2000);
+
+        cy.get('[class="item-value text-red text-lg"]').eq(0).should('have.text', "2024-03-13");
+        cy.get('[class="item-value text-red text-lg"]').eq(1).should('have.text', "2024-03-16");
+        cy.get('[class="item-value text-red text-lg"]').eq(2).should('have.text', "2024-03-25");
+    });
+
+    it("Sort Items by Expiration: Descending", () => {
+        cy.viewport(1920, 1080);
+        cy.visit('localhost:3000/inventory');
+        cy.wait(2000);
+        cy.get('select.p-2.rounded-xl').select('ED');
+        cy.wait(2000);
+
+        cy.get('[class="item-value text-red text-lg"]').eq(2).should('have.text', "2024-03-13");
+        cy.get('[class="item-value text-red text-lg"]').eq(1).should('have.text', "2024-03-16");
+        cy.get('[class="item-value text-red text-lg"]').eq(0).should('have.text', "2024-03-25");
+    });
+
+    it('Check if User Account Information is Consistent', () => {
+        cy.visit('localhost:3000/private');
+        cy.wait(2000);
+
+        cy.contains('Delete Account').click();
+        cy.wait(5000);
+    });
+});
