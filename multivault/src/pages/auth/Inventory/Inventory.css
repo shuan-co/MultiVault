@@ -151,3 +151,8 @@ body, html {
 .text-red {
   color: red !important;
 }
+
+.add-button:disabled {
+  background-color: #cccccc; 
+  cursor: not-allowed;
+}
