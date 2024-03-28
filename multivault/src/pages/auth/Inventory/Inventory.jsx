@@ -265,8 +265,8 @@ const Inventory = ({
               )}
        </div>
        <div className="p-6 space-y-3 w-full">
-            <div className="header w-full p-5 bg-slate-200 rounded-xl">
-                <div className='flex items-center justify-between'>
+            <div className="2xl:w-full xl:w-10/12 lg:w-9/12 md:w-10/12 p-5 bg-slate-200 rounded-xl md:ms-8 lg:ms-8 xl:ms-8">
+                <div className='xl:flex items-center justify-between'>
                     <div className='flex gap-3 items-center'>
                         <h1>Sort By:</h1>
                         <select value={selected} className='p-2 rounded-xl' onChange={(e) => setSelected(e.target.value)}>
@@ -279,19 +279,19 @@ const Inventory = ({
                             <option value={'F'}>Favorited</option>
                         </select>
                     </div>
-                    <div className='space-x-3'>
-                      <button className="add-button" onClick={onShowUseItem} disabled={selectedItems.length === 0}>USE ITEMS</button>
-                      <button className="add-button" onClick={onShowOrderItem} disabled={selectedItems.length === 0}>ORDER ITEMS</button>
-                      <button className="add-button" onClick={onShowAddItem}>ADD</button>
+                    <div className='space-x-3 mt-5 xl:mt-0'>
+                      <button className="add-button px-3 py-2 text-sm sm:text-md" onClick={onShowUseItem} disabled={selectedItems.length === 0}>USE ITEMS</button>
+                      <button className="add-button px-3 py-2 text-sm sm:text-md" onClick={onShowOrderItem} disabled={selectedItems.length === 0}>ORDER ITEMS</button>
+                      <button className="add-button px-3 py-2 text-sm sm:text-md" onClick={onShowAddItem}>ADD</button>
                     </div>
                 </div>
             </div>
-            <div className="filter-buttons ">
+            <div className="filter-buttons xl:ms-8 lg:ms-8 md:ms-8 mx-auto">
                 <button onClick={() => setFilterBy('All')} className={filterBy === 'All' ? 'active' : ''}>All</button>
                 <button onClick={() => setFilterBy('Perishable')} className={filterBy === 'Perishable' ? 'active' : ''}>Perishable</button>
                 <button onClick={() => setFilterBy('Non-Perishable')} className={filterBy === 'Non-Perishable' ? 'active' : ''}>Non-Perishable</button>
             </div>
-            <div className="inventory">
+            <div className="inventory sm:grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 space-y-4 sm:space-y-0">
             {currentItems.length > 0 ? (
                 currentItems.map((item, index) => (
                 <div key={index} className={`item ${isLowOnStock(item) || alertExpiry(item) ? 'highlight-red' : 'bg-slate-300'} h-full shadow-2xl drop-shadow-2xl rounded-xl space-y-3`}>

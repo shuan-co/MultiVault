@@ -13,7 +13,7 @@ body, html {
   gap: 0px;
   padding: 20px;
   background: #f0f4f8; 
-  height: 100vh;
+  height: auto;
   box-sizing: border-box; 
   overflow: hidden; 
 }
@@ -33,12 +33,11 @@ body, html {
 
 /* Inventory grid */
 .inventory {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); 
   gap: 15px; 
   align-content: start; 
   margin-left:3%;
   margin-top: 4%;
+  height: auto;
 }
 /*
 .item-name {

@@ -262,7 +262,7 @@ export default function Landing() {
             </div>
         </div>
 
-        <div id='about' className='text-center space-y-10 pt-12 bg-slate-300 w-screen bg-neutral-900 text-slate-200 h-full sm:h-screen flex items-center justify-center'>
+        <div id='about' className='text-center space-y-10 pt-12 bg-slate-900 w-screen bg-neutral-900 text-slate-200 h-full sm:h-screen flex items-center justify-center'>
             <div className='space-y-10'>
                 <div className='space-y-3'>
                     <h1 className='uppercase font-bold text-3xl'>About</h1>
