@@ -7,7 +7,7 @@ import { auth, storage } from '../../../firebase/firebase';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {v4} from 'uuid';
 
-const EditItem = ({ onEdit, show, onHide, item }) => {
+const EditItem = ({ onEdit, show, onHide, item, onDelete }) => {
     const currDate = new Date().toISOString().split('T')[0]
     const [itemName, setItemName] = useState('');
     const [itemDescription, setItemDescription] = useState('');
@@ -19,7 +19,7 @@ const EditItem = ({ onEdit, show, onHide, item }) => {
 
     useEffect(() => {
         // Initialize state with item values when the component mounts
-        if (item) {
+        if( item ) {
             setItemName(item.name);
             setItemDescription(item.description);
             setItemQuantity(item.quantityCurr);
@@ -33,7 +33,7 @@ const EditItem = ({ onEdit, show, onHide, item }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (!itemName.trim() || !itemDescription.trim() || !itemQuantity.trim()) return;
+        if( !itemName.trim() || !itemDescription.trim() || !itemQuantity.trim() ) return;
 
         // - Upload image
         if (itemImage != null) {
@@ -52,7 +52,7 @@ const EditItem = ({ onEdit, show, onHide, item }) => {
                         status: itemStatus,
                         expiry : itemExpiry, 
                         index: itemIndex,
-                        imageurl: url
+                        imageurl: imageRef
                     };
 
                     onEdit(updatedItem);
@@ -79,12 +79,18 @@ const EditItem = ({ onEdit, show, onHide, item }) => {
 
     const handleImageChange = (e) => {
         setItemImage(e.target.files[0]);
-      };
+    };
+
+    const handleDelete = () => {
+        onDelete(itemIndex);
+        onHide();
+    };
     
     return (
         <Modal show={show} onHide={onHide} centered>
-            <Modal.Header closeButton className='px-9 pt-8'>
+            <Modal.Header closeButton className='modal-header-2 px-9 pt-8'>
                 <Modal.Title>Edit Item</Modal.Title>
+                <button className="delete-item-button text-red rounded-lg p-2 bg-red-100" onClick={handleDelete}>Delete</button>
             </Modal.Header>
             <Modal.Body className='px-9 pb-8 pt-5'>
                 <form onSubmit={handleSubmit}>

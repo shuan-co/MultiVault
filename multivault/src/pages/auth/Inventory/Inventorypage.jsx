@@ -125,6 +125,29 @@ function Inventorypage() {
   };
 
   /*************************************************************** 
+                      Delete Item Functionality
+  ***************************************************************/
+  const handleDeleteItem = async (itemIndex) => {
+    try {
+      const itemsCollectionRef = collection(db, `users/${auth.currentUser?.uid}/items`);
+      const q = query(itemsCollectionRef, where('index', '==', itemIndex));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        const itemDoc = querySnapshot.docs[0];
+        await deleteDoc(doc(itemsCollectionRef, itemDoc.id));
+        console.log('Item deleted successfully');
+        setShowEditItem(false);
+        retrieveItems();
+      } else {
+        console.log('Item not found');
+      }
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
+  };
+
+  /*************************************************************** 
                       Multiselect Functionality
   ***************************************************************/
   const [selectedItems, setSelectedItems] = useState([]);
@@ -402,7 +425,7 @@ function Inventorypage() {
                      onShowOrderItem={() => setShowOrderItem(true)}
                      />
           <AddItem onAdd={handleAddItem} show={showAddItem} onHide={() => setShowAddItem(false)} />
-          <EditItem onEdit={handleEditItem} show={showEditItem} onHide={() => setShowEditItem(false)} item={itemToEdit} />
+          <EditItem onEdit={handleEditItem} show={showEditItem} onHide={() => setShowEditItem(false)} item={itemToEdit} onDelete={handleDeleteItem}/>
           <UseItem onUse={handleUsageHistory} show={showUseItem} onHide={() => setShowUseItem(false)} selectedItems={selectedItems}/>
           <OrderItem onOrder={handleOrderHistory} show={showOrderItem} onHide={() => setShowOrderItem(false)} selectedItems={selectedItems}/>
         </main>
