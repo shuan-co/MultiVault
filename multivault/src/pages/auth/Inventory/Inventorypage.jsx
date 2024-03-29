@@ -9,7 +9,7 @@ import OrderItem from './OrderItem';
 import { auth, db } from '../../../firebase/firebase';
 import { collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc, query, where } from "firebase/firestore";
 import { signOut, updateProfile } from 'firebase/auth';
-import { sendEmailNotification } from '../../../hooks/EmailNotification';
+import { sendEmailNotification } from '../../../utils/EmailNotification';
 import Navbar from '../Components/Navbar';
 
 function Inventorypage() {
@@ -20,18 +20,6 @@ function Inventorypage() {
   // - Item Details
   const [items, setItems] = useState([]);
   const itemsCollectionRef = collection(db, `users/${auth.currentUser?.uid}/items`);
-
-  // Alert Expiration
-  const alertExpiry = (item) => {
-    const currDate = new Date();
-    const expiryDate = new Date(item.expiry);
-    // Calculate the difference between the two dates in milliseconds
-    const differenceMs = expiryDate - currDate;
-    // Convert milliseconds to days
-    const differenceDays = differenceMs / (1000 * 60 * 60 * 24);
-
-    return differenceDays <= 2;
-  }
 
   useEffect(() => {
     retrieveUser();
@@ -53,6 +41,35 @@ function Inventorypage() {
     })
   }
 
+  /*************************************************************** 
+                      Email Notification Functions
+  ***************************************************************/
+  // Alert Expiration
+  const alertExpiry = (item) => {
+    const currDate = new Date();
+    const expiryDate = new Date(item.expiry);
+    // Calculate the difference between the two dates in milliseconds
+    const differenceMs = expiryDate - currDate;
+    // Convert milliseconds to days
+    const differenceDays = differenceMs / (1000 * 60 * 60 * 24);
+
+    return differenceDays <= 2;
+  }
+
+  // Check if an item is low on stock
+  const isLowOnStock = (item) => {
+    const tenPercentOfOriginal = item.quantityOrig * 0.1;
+    return item.quantityCurr <= tenPercentOfOriginal;
+  }
+
+  const checkItemCondition = (item) => {
+    if (alertExpiry(item)) {
+      sendEmailNotification(auth.currentUser?.email, item, "expiry");
+    }
+    else if (isLowOnStock(item)) {
+      sendEmailNotification(auth.currentUser?.email, item, "lowstock");
+    } 
+  }
 
   /*************************************************************** 
                       Add Items Functions
@@ -64,6 +81,7 @@ function Inventorypage() {
     addDoc(itemsCollectionRef, item)
     .then(() => {
       alert('Item Added Successfully');
+      checkItemCondition(item);
     })
     .catch((err) => {
       alert('Error Adding Item');
@@ -108,9 +126,7 @@ function Inventorypage() {
       // Update the document with the new data
       updateDoc(doc.ref, updatedItem).then(() => {
         alert('Item Updated Successfully');
-        if (alertExpiry(updatedItem)) {
-          sendEmailNotification(auth.currentUser?.email, updatedItem);
-        }
+        checkItemCondition(updatedItem);
       }).catch((err) => {
         alert('Error Updating Item');
         console.error(err);
@@ -216,6 +232,7 @@ function Inventorypage() {
         const selectedItemIndex = selectedItems.findIndex(selectedItem => selectedItem.index === usedItem.index );
         if( selectedItemIndex !== - 1 ) {
           selectedItems[selectedItemIndex].quantityCurr = updatedQuantity;
+          checkItemCondition(selectedItems[selectedItemIndex]);
         }
       }
 
