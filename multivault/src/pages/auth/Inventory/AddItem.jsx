@@ -19,6 +19,7 @@ const AddItem = ({ onAdd, show, onHide }) => {
   const [itemIndex, setItemIndex] = useState(0);
   const [isPrioritized, setIsPrioritized] = useState(false); // New state for prioritization
 
+  // Function to check if the item about to be added is near its expiring date
   const alertExpiry = (item_date) => {
     const currDate = new Date();
     const expiryDate = new Date(item_date);
