@@ -19,52 +19,69 @@ const AddItem = ({ onAdd, show, onHide }) => {
   const [itemIndex, setItemIndex] = useState(0);
   const [isPrioritized, setIsPrioritized] = useState(false); // New state for prioritization
 
+  const alertExpiry = (item_date) => {
+    const currDate = new Date();
+    const expiryDate = new Date(item_date);
+    // Calculate the difference between the two dates in milliseconds
+    const differenceMs = expiryDate - currDate;
+    // Convert milliseconds to days
+    const differenceDays = differenceMs / (1000 * 60 * 60 * 24);
+
+    if (differenceDays <= 2) {
+      // eslint-disable-next-line no-restricted-globals
+      return confirm("You are adding an item that is about to expire. Proceed?");
+    }
+
+    return true;
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (alertExpiry(itemExpiry)) {
+      const newIndex = Date.now(); // - unique indexing, works cause we can only add 1 item at a time
 
-    const newIndex = Date.now(); // - unique indexing, works cause we can only add 1 item at a time
+      // Upload image
+      if (itemImage != null) {
+        const imageRef = ref(storage,  `${auth.currentUser?.uid}/${itemImage.name + v4()}`);
 
-    // Upload image
-    if (itemImage != null) {
-      const imageRef = ref(storage,  `${auth.currentUser?.uid}/${itemImage.name + v4()}`);
-
-      uploadBytes(imageRef, itemImage)
-      .then(() => {
-        // Get Image URL for rendering
-        getDownloadURL(imageRef)
-        .then((url) => {
-            // Data with image URL
-            if (!itemName.trim() || !itemDescription.trim() || !itemQuantity.trim()) return;
-            onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantityOrig: itemQuantity,  quantityCurr: itemQuantity, imageurl: url, expiry: itemExpiry, index: Date.now(), prioritized: isPrioritized }); // Include prioritized field in the item data
-            setItemName('');
-            setItemDescription('');
-            setItemQuantity('');
-            setItemStatus('');
-            setItemImage(null);
-            setItemExpiry(currDate);
-            setIsPrioritized(false);
-            onHide();
+        uploadBytes(imageRef, itemImage)
+        .then(() => {
+          // Get Image URL for rendering
+          getDownloadURL(imageRef)
+          .then((url) => {
+              // Data with image URL
+              if (!itemName.trim() || !itemDescription.trim() || !itemQuantity.trim()) return;
+              onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantityOrig: itemQuantity,  quantityCurr: itemQuantity, imageurl: url, expiry: itemExpiry, index: Date.now(), prioritized: isPrioritized }); // Include prioritized field in the item data
+              setItemName('');
+              setItemDescription('');
+              setItemQuantity('');
+              setItemStatus('');
+              setItemImage(null);
+              setItemExpiry(currDate);
+              setIsPrioritized(false);
+              onHide();
+          })
+          .catch((err) => {
+            console.error(err);
+          })
         })
         .catch((err) => {
           console.error(err);
         })
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-    }
-    else {
-      // Data without image URL
-      if (!itemName.trim() || !itemDescription.trim() || !itemQuantity.trim()) return;
-      onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantityOrig: itemQuantity, quantityCurr: itemQuantity, expiry: itemExpiry, index: Date.now(), prioritized: isPrioritized }); // Include prioritized field in the item data
-      setItemName('');
-      setItemDescription('');
-      setItemQuantity('');
-      setItemStatus('');
-      setItemImage(null);
-      setItemExpiry(currDate);
-      setIsPrioritized(false);
-      onHide();
+      }
+      else {
+        // Data without image URL
+        if (!itemName.trim() || !itemDescription.trim() || !itemQuantity.trim()) return;
+        onAdd({ name: itemName, description: itemDescription, status:itemStatus, quantityOrig: itemQuantity, quantityCurr: itemQuantity, expiry: itemExpiry, index: Date.now(), prioritized: isPrioritized }); // Include prioritized field in the item data
+        setItemName('');
+        setItemDescription('');
+        setItemQuantity('');
+        setItemStatus('');
+        setItemImage(null);
+        setItemExpiry(currDate);
+        setIsPrioritized(false);
+        onHide();
+      }
     }
   };
 
