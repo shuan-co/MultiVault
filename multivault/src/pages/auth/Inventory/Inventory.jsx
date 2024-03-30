@@ -307,6 +307,7 @@ const Inventory = ({
                         </button>
                         <button
                             className="prioritize-button"
+                            data-testid="prioritize-button"
                             onClick={() => {
                             console.log('Button clicked. Item id:', item.id);
                             togglePrioritize(item.id);
