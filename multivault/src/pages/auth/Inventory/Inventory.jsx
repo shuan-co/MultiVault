@@ -297,7 +297,7 @@ const Inventory = ({
                 <div key={index} className={`item ${isLowOnStock(item) || alertExpiry(item) ? 'highlight-red' : 'bg-slate-300'} h-full shadow-2xl drop-shadow-2xl rounded-xl space-y-3`}>
                     <div className='item-header px-2 pt-2'>
                         <input
-                            class="item-select-checkbox"
+                            className="item-select-checkbox"
                             type="checkbox"
                             onChange={() => onToggleSelectItem(item.index)}
                             datatest-id='itemSelect'
@@ -307,7 +307,6 @@ const Inventory = ({
                         </button>
                         <button
                             className="prioritize-button"
-                            data-testid="prioritize-button"
                             onClick={() => {
                             console.log('Button clicked. Item id:', item.id);
                             togglePrioritize(item.id);
