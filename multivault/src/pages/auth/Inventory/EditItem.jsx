@@ -97,19 +97,19 @@ const EditItem = ({ onEdit, show, onHide, item, onDelete }) => {
                     <input
                         type="text" value={itemName}
                         onChange={(e) => setItemName(e.target.value)}
-                        datatest-id="editItemName"
+                        data-testid="editItemName"
                     />
                     <input
                         type="text" placeholder="Enter item description" value={itemDescription}
                         onChange={(e) => setItemDescription(e.target.value)}
-                        datatest-id="editItemDescription"
+                        data-testid="editItemDescription"
                     />
                     <input
                         type="number" placeholder="Enter item quantity" value={itemQuantity}
                         onChange={(e) => setItemQuantity(e.target.value)}
-                        datatest-id="editItemQuantity"
+                        data-testid="editItemQuantity"
                     />
-                    <select value={itemStatus} onChange={(e) => setItemStatus(e.target.value)} datatest-id="editItemStatus" className='p-3 rounded-md border'>
+                    <select value={itemStatus} onChange={(e) => setItemStatus(e.target.value)} data-testid="editItemStatus" className='p-3 rounded-md border'>
                         <option value="">Select Status</option>
                         <option value="Perishable">Perishable</option>
                         <option value="Non-Perishable">Non-Perishable</option>
@@ -119,7 +119,7 @@ const EditItem = ({ onEdit, show, onHide, item, onDelete }) => {
                         placeholder="Expiry Date"
                         value={itemExpiry}
                         onChange={(e) => setItemExpiry(e.target.value)}
-                        datatest-id="editItemDate"
+                        data-testid="editItemDate"
                     />
                     <input
                         type="file"
