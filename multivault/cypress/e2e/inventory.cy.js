@@ -165,11 +165,11 @@ describe('Iventory Item Management', () => {
         cy.wait(1000);
 
         // Edit Form Values
-        cy.get('[datatest-id=editItemName]').clear().type('Chicken Ball');
-        cy.get('[datatest-id=editItemDescription]').clear().type('The chicken is a chicken');
-        cy.get('[datatest-id=editItemQuantity]').clear().type('20');
-        cy.get('[datatest-id=editItemStatus]').select('Perishable');
-        cy.get('[datatest-id=editItemDate]').clear().type('2025-02-03');
+        cy.get('[data-testid=editItemName]').clear().type('Chicken Ball');
+        cy.get('[data-testid=editItemDescription]').clear().type('The chicken is a chicken');
+        cy.get('[data-testid=editItemQuantity]').clear().type('20');
+        cy.get('[data-testid=editItemStatus]').select('Perishable');
+        cy.get('[data-testid=editItemDate]').clear().type('2025-02-03');
 
         // Submit the Edit Form
         cy.contains('Submit').click();
