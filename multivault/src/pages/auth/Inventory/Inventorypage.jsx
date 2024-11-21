@@ -11,6 +11,7 @@ import { collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc, query, 
 import { signOut, updateProfile } from 'firebase/auth';
 import { sendEmailNotification } from '../../../utils/EmailNotification';
 import Navbar from '../Components/Navbar';
+import { LoggingService } from '../../../utils/LoggingService';
 
 function Inventorypage() {
 
@@ -20,6 +21,7 @@ function Inventorypage() {
   // - Item Details
   const [items, setItems] = useState([]);
   const itemsCollectionRef = collection(db, `users/${auth.currentUser?.uid}/items`);
+  const loggingService = new LoggingService();
 
   useEffect(() => {
     retrieveUser();
@@ -76,21 +78,36 @@ function Inventorypage() {
   ***************************************************************/
   const [showAddItem, setShowAddItem] = useState(false);
 
-  const handleAddItem = (item) => {
-    // Add the item
-    addDoc(itemsCollectionRef, item)
-    .then(() => {
-      alert('Item Added Successfully');
-      checkItemCondition(item);
-    })
-    .catch((err) => {
-      alert('Error Adding Item');
-      console.error(err);
-    })
-
-    setShowAddItem(false); // Close the modal after item is added
-    retrieveItems();
-  };
+  const handleAddItem = async (item) => {
+    try {
+        await addDoc(itemsCollectionRef, item);
+        await loggingService.logEvent(
+            'inventory_add',
+            {
+                itemName: item.name,
+                quantity: item.quantityOrig,
+                status: item.status
+            },
+            auth.currentUser?.uid,
+            'info'
+        );
+        alert('Item Added Successfully');
+        checkItemCondition(item);
+    } catch (err) {
+        await loggingService.logEvent(
+            'inventory_error',
+            {
+                action: 'add',
+                error: err.message,
+                item: item.name
+            },
+            auth.currentUser?.uid,
+            'error'
+        );
+        alert('Error Adding Item');
+        console.error(err);
+    }
+};
 
   /*************************************************************** 
                       Edit Items Functions
@@ -144,23 +161,40 @@ function Inventorypage() {
                       Delete Item Functionality
   ***************************************************************/
   const handleDeleteItem = async (itemIndex) => {
-    try {
-      const itemsCollectionRef = collection(db, `users/${auth.currentUser?.uid}/items`);
-      const q = query(itemsCollectionRef, where('index', '==', itemIndex));
-      const querySnapshot = await getDocs(q);
-
+   try {
+       const itemsCollectionRef = collection(db, `users/${auth.currentUser?.uid}/items`);
+       const q = query(itemsCollectionRef, where('index', '==', itemIndex));
+       const querySnapshot = await getDocs(q);
+                    
       if (!querySnapshot.empty) {
-        const itemDoc = querySnapshot.docs[0];
-        await deleteDoc(doc(itemsCollectionRef, itemDoc.id));
-        console.log('Item deleted successfully');
-        setShowEditItem(false);
-        retrieveItems();
-      } else {
-        console.log('Item not found');
-      }
+          const itemDoc = querySnapshot.docs[0];
+          await deleteDoc(doc(itemsCollectionRef, itemDoc.id));
+          await loggingService.logEvent(
+              'inventory_delete',
+              {
+                  itemIndex,
+                  itemName: itemDoc.data().name
+              },
+              auth.currentUser?.uid,
+              'warning'
+              );
+              console.log('Item deleted successfully');
+              setShowEditItem(false);
+              retrieveItems();
+         }
     } catch (error) {
-      console.error('Error deleting item:', error);
-    }
+        await loggingService.logEvent(
+            'inventory_error',
+            {
+                action: 'delete',
+                error: error.message,
+                itemIndex
+            },
+            auth.currentUser?.uid,
+            'error'
+        );
+         console.error('Error deleting item:', error);
+     }
   };
 
   /*************************************************************** 

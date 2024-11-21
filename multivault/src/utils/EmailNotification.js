@@ -1,6 +1,5 @@
 import emailjs from '@emailjs/browser';
 
-// Function to send email notification
 export const sendEmailNotification = async (recipientEmail, item, type) => {
     const emailServiceId = 'service_kinm5t9'; 
     const expiryTemplate = "template_th9ye6j";

@@ -13,6 +13,7 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import EditIcon from '@mui/icons-material/Edit';
 import { grey, yellow } from '@mui/material/colors'
 import ProfileSection from './ProfileSection';
+import { loggingService } from '../../../utils/LoggingService';
 
 const Inventory = ({ 
   userData, onSave, onDelete, onLogout, items, onShowAddItem, onShowEditItem, 
