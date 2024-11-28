@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, getDoc, doc } from 'firebase/firestore';
 import { deleteUser } from 'firebase/auth';
 import { auth, db } from '../../../firebase/firebase';
 import { ROLES } from '../../noauth/roles';
@@ -30,8 +30,9 @@ const AdminDashboard = () => {
         return;
       }
 
-      const userDoc = await getDocs(doc(db, 'users', currentUser.uid));
-      const userData = userDoc.data();
+      const userDocRef = doc(db, 'users', currentUser.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      const userData = userDocSnap.data();
 
       if (!userData || userData.role !== ROLES.ADMIN) {
         navigate('/unauthorized');
